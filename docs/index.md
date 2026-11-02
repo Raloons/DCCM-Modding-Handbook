@@ -1,8 +1,6 @@
 # Dead Cells Modding Handbook
 
-**Dead Cells Modding Handbook** is a free, open-source community resource dedicated to helping developers learn how to create and expand mods for *Dead Cells* using the **Dead Cells Core Modding (DCCM)** framework.
-
-This handbook is under active development: new tutorials appear over time, and some advanced subjects are experimental. If you spot a mistake, please [open an issue](https://github.com/Raloons/DCCM-Modding-Guides/issues).
+**Dead Cells Modding Handbook** is a free resource made to help developers learn how to create mods for Dead Cells using the Dead Cells Core Modding (DCCM) framework.
 
 ## Getting Started
 
@@ -26,7 +24,7 @@ New to DCCM modding? Work through these in order:
 
 ## Requirements
 
-This handbook focuses on modding through **Dead Cells Core Modding (DCCM)**.
+This handbook focuses on modding through Dead Cells Core Modding (DCCM).
 
 - [Dead Cells Core Modding — GitHub](https://github.com/dead-cells-core-modding/core)
 - [DCCM Documentation](https://dead-cells-core-modding.github.io/docs/)
