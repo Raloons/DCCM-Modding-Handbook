@@ -1,9 +1,9 @@
 site_name: Dead Cells Modding Handbook
 site_description: Community DCCM modding tutorials and references.
 site_author: DCCM Modding Handbook contributors
-site_url: https://raloons.github.io/DCCM-Modding-Guides/
-repo_url: https://github.com/Raloons/DCCM-Modding-Guides
-repo_name: Raloons/DCCM-Modding-Guides
+site_url: https://raloons.github.io/DCCM-Modding-Handbook/
+repo_url: https://github.com/Raloons/DCCM-Modding-Handbook
+repo_name: Raloons/DCCM-Modding-Handbook
 edit_uri: blob/main/docs/
 
 theme:
@@ -51,7 +51,7 @@ markdown_extensions:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/Raloons/DCCM-Modding-Guides
+      link: https://github.com/Raloons/DCCM-Modding-Handbook
       name: GitHub repository
 extra_css:
   - stylesheets/extra.css

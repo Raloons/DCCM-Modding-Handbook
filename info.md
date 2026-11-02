@@ -1,4 +1,4 @@
-# DCCM-Modding-Guides
+# DCCM-Modding-Handbook
 
 This is a community resource created to helping developers learn how to create and expand mods for Dead Cells using the Dead Cells Core Modding (DCCM) framework. The goal of this project is to make Dead Cells modding more accessible by providing clear explanations and references for developers (and some AI assistants!).
 
