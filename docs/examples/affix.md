@@ -1,6 +1,6 @@
 # Legendary Affix Replacement Example: Pure Nail
 
-This is my raw code for my Pure Nail affix. 
+This is my source code for the Pure Nail legendary affix rework.
 
 What does it do?
 - This makes Pure Nail have a unique affix instead of being a plain placeholder of spawning biters on kill. When you have missing jumps, Pure Nail will refresh one jump for the first hit you land in the air with the weapon. This resets upon touching the ground.
