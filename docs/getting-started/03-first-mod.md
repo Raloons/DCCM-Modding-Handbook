@@ -23,7 +23,8 @@ In your `TitleScreenTag` project folder (next to the `.csproj` from [Dev Environ
 ```csharp
 using HaxeProxy.Runtime;
 using ModCore.Mods;
-using Serilog;
+using ModCore.Modules;
+using ModCore.Utilities;
 
 namespace TitleScreenTag;
 
@@ -69,7 +70,7 @@ public class TitleScreenTagMod(ModInfo info) : ModBase(info)
 
 Now, what does this mean? Going top to bottom:
 
-- The three `using` lines are address books: they tell the compiler where `ModBase`, `HashlinkHooks`, and `Logger` live so you can use their short names. Without them you would have to write full addresses everywhere.
+- The four `using` lines are address books: they tell the compiler which toolbox each name comes from, so you can use short names. `ModCore.Mods` provides the mod base classes (`ModBase`, `ModInfo`) and the `Logger` diary. `ModCore.Modules` provides the hook system (`HashlinkHooks`). `ModCore.Utilities` provides the translator (`AsHaxeString`). `HaxeProxy.Runtime` provides the engine proxy types. Without them you would have to write full addresses everywhere. Leave all four in place: each one was verified load-bearing by removing it and watching the build fail with a "does not exist" error naming exactly what went missing.
 - `namespace TitleScreenTag;` puts your code in a labeled box with your mod's name, so it cannot collide with the game's code or other mods' code. This must match the first half of `ModMain` in your project file.
 - `public class TitleScreenTagMod(ModInfo info) : ModBase(info)` declares your mod itself: "TitleScreenTagMod is a ModBase (a loadable mod), and here is how it receives its info." This must match the second half of `ModMain`. If these names disagree with the project file, the framework knocks on a door that does not exist and your mod silently never loads.
 - `private const string Suffix = ...` is your mod's text, stored in one place with a name. Changing the label later means editing this one line, not hunting through logic.
@@ -90,7 +91,7 @@ Now, what does this mean? Going top to bottom:
 dotnet build -c Release
 ```
 
-Same idea as last page: run the build (see [Dev Environment](02-dev-environment.md) Step 3). You need `Build succeeded. 0 Warning(s) 0 Error(s)`. A warning here - especially about the delegate or the hook call - means your mold does not match the real function, and the hook will silently never fire in game. Fix warnings now; they are ten times harder to diagnose from inside the game.
+Same idea as last page: run the build (see [Dev Environment](02-dev-environment.md) Step 3). You need `Build succeeded. 0 Warning(s) 0 Error(s)`. This exact file was compiled against MDK 1.0.1 while writing this handbook: restore from NuGet, 0 warnings, 0 errors, manifest generated. A warning here - especially about the delegate or the hook call - means your mold does not match the real function, and the hook will silently never fire in game. Fix warnings now; they are ten times harder to diagnose from inside the game.
 
 ## Step 3 - Deploy it
 
