@@ -1,0 +1,64 @@
+# DCCM Modding Handbook — new clean repo scaffold
+# Handbook-appropriate ignore: build outputs, game data, saves, logs.
+# Never commit proprietary game files, saves, or absolute-path manifests.
+
+# --- .NET build artifacts (regenerated from source) ---
+bin/
+obj/
+build/
+buildoutput/
+*.deps.json
+*.dll
+*.pdb
+*.exe
+packages/
+*.nupkg
+*.user
+*.suo
+*.coverage
+*.coveragexml
+
+# --- Generated resource packages (rebuild locally) ---
+**/res.pak
+**/*.pak
+
+# --- Game databases and binary game data (proprietary, never publish) ---
+*.cdb
+*.bak
+*.hlboot
+hlboot.dat
+
+# --- Game saves, profiles, player data (private, machine-specific) ---
+save*/
+save_*/
+*.sav
+*.dat.bak
+
+# --- Runtime logs / crash dumps ---
+*.log
+log_*/
+*.dmp
+*.crash
+
+# --- Python / tooling caches ---
+__pycache__/
+*.pyc
+*.pyo
+
+# --- IDE / OS ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+Thumbs.db
+.DS_Store
+
+# --- Local deployment manifests (absolute paths) ---
+coremod/
+*.deploy.json
+
+# --- Temp / scratch ---
+tmp/
+temp/
+tmp*.json
