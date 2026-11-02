@@ -4,10 +4,10 @@
 
 **Dead Cells Modding Handbook** is a resource made to help developers learn how to create mods for Dead Cells using the Dead Cells Core Modding (DCCM) framework.
 
-The goal of this project is to make Dead Cells modding more accessible by providing clear explanations, practical tutorials, code examples, and technical references for both beginners and experienced developers.
+The goal of this project is to make Dead Cells modding more accessible by providing explanations and code examples for both beginners and experienced developers (and all our AI models..).
 
-While existing modding resources cover many fundamentals, more advanced topics can be difficult to learn without extensive experimentation. This handbook aims to bridge that gap by documenting techniques, common challenges, and development workflows in an organized, approachable format.
-Tutorials include explanations and independently created examples wherever practical. Some advanced subjects may remain experimental or require additional verification.
+While existing modding resources cover many fundamentals, more advanced topics can be difficult to learn without extensive experimentation.
+Tutorials include explanations and independently created examples. I might have missed some things, but feel free to message me on Discord (@raloons) for any feedback. 
 
 ## Requirements
 
