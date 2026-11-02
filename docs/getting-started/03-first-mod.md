@@ -1,4 +1,4 @@
-# Your First Mod: TitleScreenTag (status: educational example)
+# Your First Mod: TitleScreenTag
 
 Build a minimal mod that appends text to the title-screen build label. You will write one code file, understand every line of it, deploy it, and watch the game obey it. This is an independently written teaching example that demonstrates the core pattern of all DCCM modding: an orig-first, fail-open hook.
 

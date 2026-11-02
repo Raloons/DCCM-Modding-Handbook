@@ -1,4 +1,4 @@
-# Custom Levels and Biomes (status: concept - generalized pattern, examples not live-verified)
+# Custom Levels and Biomes
 
 Add a custom room to the game without breaking generation, travel, saves, or other mods. This guide builds a read-only merge observer, a disposable-fixture workflow, an offline validation script, and the four-gate path from catalog presence to a walkable room. Level work is the highest-risk area in this handbook - follow the safety sections exactly.
 

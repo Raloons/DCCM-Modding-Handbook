@@ -1,4 +1,4 @@
-# Custom Equipment (status: concept - generalized pattern, examples not live-verified)
+# Custom Equipment
 
 Build a complete custom melee weapon mod from an empty folder to a verified in-game item. This is a long guide by design: it covers project setup, the data row, the behavior code, the icon, deployment, verification, and removal. Every example is independently written for teaching. Match delegate and API shapes to the real DCCM API docs - never guess a signature.
 

@@ -1,4 +1,4 @@
-# Dev Environment (status: live-observed pattern)
+# Dev Environment
 
 Set up the tools that turn your ideas into installable mods. This page assumes you have never built a .NET project before. Every piece of configuration is explained line by line: what it is, what it does, and what breaks if it is wrong.
 

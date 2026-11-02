@@ -1,4 +1,4 @@
-# Gameplay Modifications (status: concept - generalized pattern, examples not live-verified)
+# Gameplay Modifications
 
 Change combat behavior - damage windows, cooldown effects, per-hit tracking - without destabilizing the run. This guide builds a complete victim-attributed kill-window system and a read-only per-hit probe with an analysis workflow, plus stacking rules and a two-session test protocol. All code is independently written teaching material.
 

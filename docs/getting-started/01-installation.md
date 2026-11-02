@@ -1,4 +1,4 @@
-# Installation (status: live-observed pattern)
+# Installation
 
 Get a working game plus framework install you can mod safely. This page assumes you have never modded Dead Cells before. Every step explains what you are doing and why, so both first-time humans and AI assistants can follow it exactly.
 

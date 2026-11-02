@@ -1,4 +1,4 @@
-# Animations and Visual Effects (status: concept - generalized pattern, examples not live-verified)
+# Animations and Visual Effects
 
 Ship visual effects that survive the engine's sync, the layout's reflow, and the player's movement. This guide builds a complete pooled slash-echo system and a layout-safe UI element, with budgets, cleanup proofs, and performance checks. All code is independently written teaching material.
 

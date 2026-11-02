@@ -1,4 +1,4 @@
-# Game Data and Resources (status: concept - generalized pattern, examples not live-verified)
+# Game Data and Resources
 
 Package data and assets so your mod installs cleanly, coexists with other mods, and never endangers saves. This guide covers overlay design, reference integrity, repeatable packaging, an offline validation suite with negative cases, and the five-load proof with hash-verified rollback. Never publish game data files, built packages, or save bytes - document shapes and policies, not content.
 
