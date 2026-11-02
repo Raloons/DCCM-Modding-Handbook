@@ -71,4 +71,5 @@ nav:
   - Examples:
       - Melee Weapon: examples/melee-weapon.md
       - Skill: examples/skill.md
+      - Affix: examples/affix.md
       - Mutation: examples/mutation.md

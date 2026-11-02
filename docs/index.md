@@ -22,7 +22,8 @@ New to DCCM modding? Work through these in order:
 | [Debugging & Testing](debugging-testing/index.md) | Planned outline |
 | [Melee Weapon example](examples/melee-weapon.md) | Real code: Waveblade entry point |
 | [Skill example](examples/skill.md) | Real code: Reserve Battery entry point |
-| [Mutation example](examples/mutation.md) | Real code: Twin Daggers policy |
+| [Affix example](examples/affix.md) | Real code: Pure Nail pogo policy |
+| [Mutation example](examples/mutation.md) | Real code: Contagion range visual |
 
 ## Requirements
 
