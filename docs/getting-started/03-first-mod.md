@@ -90,7 +90,7 @@ Now, what does this mean? Going top to bottom:
 dotnet build -c Release
 ```
 
-Same idea as last page: bake the dish (see [Dev Environment](02-dev-environment.md) Step 3). You need `Build succeeded. 0 Warning(s) 0 Error(s)`. A warning here - especially about the delegate or the hook call - means your mold does not match the real function, and the hook will silently never fire in game. Fix warnings now; they are ten times harder to diagnose from inside the game.
+Same idea as last page: run the build (see [Dev Environment](02-dev-environment.md) Step 3). You need `Build succeeded. 0 Warning(s) 0 Error(s)`. A warning here - especially about the delegate or the hook call - means your mold does not match the real function, and the hook will silently never fire in game. Fix warnings now; they are ten times harder to diagnose from inside the game.
 
 ## Step 3 - Deploy it
 
@@ -98,7 +98,7 @@ Same idea as last page: bake the dish (see [Dev Environment](02-dev-environment.
 Copy-Item -Recurse bin/Release/net10.0/output/TitleScreenTag '<Dead Cells>/coremod/mods/'
 ```
 
-The short version: place the whole finished folder on the extension counter (same as Dev Environment Step 4). Confirm `<Dead Cells>/coremod/mods/TitleScreenTag/` contains `TitleScreenTag.dll` and `modinfo.json` before launching - if this listing is wrong, no code on Earth will make the mod load.
+The short version: copy the whole finished folder into the game's mod folder (same as Dev Environment Step 4). Confirm `<Dead Cells>/coremod/mods/TitleScreenTag/` contains `TitleScreenTag.dll` and `modinfo.json` before launching - if this listing is wrong, no code on Earth will make the mod load.
 
 ## Step 4 - Launch and verify (two proofs)
 

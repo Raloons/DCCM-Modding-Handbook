@@ -4,12 +4,12 @@ Set up the tools that turn your ideas into installable mods. This page assumes y
 
 ## What are all these pieces?
 
-- **.NET SDK (reference: 10.0).** A free toolkit from Microsoft that translates human-written C# code into programs computers can run. Think of it as the oven that bakes your recipe. You write the recipe (code); the SDK bakes it (builds it). Install it from Microsoft's .NET download page and confirm it afterward (Step 1 below).
+- **.NET SDK (reference: 10.0).** A free toolkit from Microsoft that compiles human-written C# code into runnable programs. You write the code; the SDK turns it into the DLL file the game loads. Install it from Microsoft's .NET download page and confirm it afterward (Step 1 below).
 - **C# (the language).** The programming language your mods are written in. If you have never coded: code is just precise instructions, and this handbook's examples are designed to be readable even on day one. You do not need to master C# before your first mod - you need to be able to read the example, change the safe parts (like text), and build.
-- **A class-library project.** Your mod is not a standalone program with its own window. It is a *library*: a bundle of code the game loads. Think of the difference between a food truck (standalone program) and a new dish served through the restaurant's existing counter (library). Mods are dishes, not trucks.
+- **A class-library project.** Your mod is not a standalone program with its own window. It is a *library*: a bundle of code the game loads and runs. The game stays in charge; your code plugs into it.
 - **The MDK package (`DeadCellsCoreModding.MDK`, reference: 1.0.1).** The Mod Development Kit: pre-written plumbing that teaches your project how to become a mod (generating the manifest, packaging assets). You reference it; you never edit it.
 - **`modinfo.json` (the manifest).** A small description file the build generates: the mod's name, entry point, and type. The framework reads this to discover your mod. If it is missing or wrong, your mod is invisible - the game will not error, it just will not load it.
-- **The output folder (`output/<ModName>/`).** The finished, servable dish: your compiled code plus the manifest (plus a `res.pak` file only if your mod ships art, audio, or data). This exact folder is what you copy into the game.
+- **The output folder (`output/<ModName>/`).** The finished product: your compiled code plus the manifest (plus a `res.pak` file only if your mod ships art, audio, or data). This exact folder is what you copy into the game.
 
 ## Step 1 - Install the .NET SDK and prove it works
 
@@ -19,7 +19,7 @@ Install .NET SDK 10.0, then open a terminal (PowerShell on Windows) and run:
 dotnet --version
 ```
 
-Reading that output: you just asked the oven to introduce itself. Expected output is a version number starting with `10.` (for example `10.0.100`). If the command is not recognized, the SDK did not install correctly or the terminal was opened before installation finished - close and reopen the terminal first, then reinstall if it still fails. Do not continue until this command prints a version: nothing else in this page works without it.
+Reading that output: you just asked the installed SDK to report its own version. Expected output is a version number starting with `10.` (for example `10.0.100`). If the command is not recognized, the SDK did not install correctly or the terminal was opened before installation finished - close and reopen the terminal first, then reinstall if it still fails. Do not continue until this command prints a version: nothing else in this page works without it.
 
 ## Step 2 - Create the project file, line by line
 
@@ -60,7 +60,7 @@ In the mod folder, run:
 dotnet build -c Release
 ```
 
-In plain language: you told the oven to bake the dish (`build`), using the final recipe (`-c Release` means the optimized release version, not the draft debug version you would use while developing).
+In plain language: you told the compiler to build the project (`build`), using the optimized release configuration (`-c Release` produces the final version, not the draft debug version you would use while developing).
 
 Expected output ends with:
 
@@ -72,10 +72,10 @@ Build succeeded.
 
 How to read those numbers: the translation from code to runnable mod worked with zero complaints. The numbers matter enormously:
 
-- **Errors (must be 0):** the bake failed; nothing usable was produced. Read the error text - it names the file and line number. Fix and rebuild.
-- **Warnings (must be 0):** the bake worked, but the oven is uneasy. In modding, warnings in hook code almost always mean a name or signature mismatch that will fail *silently* in game (your hook simply never fires, with no crash to point at the cause). Treat every warning as a bug. Fix and rebuild.
+- **Errors (must be 0):** the build failed; nothing usable was produced. Read the error text - it names the file and line number. Fix and rebuild.
+- **Warnings (must be 0):** the build finished, but with concerns flagged. In modding, warnings in hook code almost always mean a name or signature mismatch that will fail *silently* in game (your hook simply never fires, with no crash to point at the cause). Treat every warning as a bug. Fix and rebuild.
 
-After a clean build, confirm the finished dish exists:
+After a clean build, confirm the finished output exists:
 
 ```
 bin/Release/net10.0/output/TitleScreenTag/
@@ -85,7 +85,7 @@ bin/Release/net10.0/output/TitleScreenTag/
 
 Open `modinfo.json` and confirm the mod name and entry point match what you wrote in the project file. If they do not match, the build used a different project file than the one you are reading - check you are in the right folder.
 
-## Step 4 - Deploy (copy the dish to the counter)
+## Step 4 - Deploy (copy the mod into the game)
 
 Copy the entire `output/TitleScreenTag/` folder into the game's mod folder:
 
@@ -93,7 +93,7 @@ Copy the entire `output/TitleScreenTag/` folder into the game's mod folder:
 Copy-Item -Recurse bin/Release/net10.0/output/TitleScreenTag '<Dead Cells>/coremod/mods/'
 ```
 
-Put simply: replace `<Dead Cells>` with your real game folder. You are placing your finished dish on the extension counter from the Installation page. Note what you copy: the *whole folder*, not just the DLL. The framework discovers mods by scanning subfolders of `coremod/mods/` - a lone DLL dropped in the wrong place is invisible.
+Put simply: replace `<Dead Cells>` with your real game folder. Copy the *whole folder*, not just the DLL. The framework discovers mods by scanning subfolders of `coremod/mods/` - a lone DLL dropped in the wrong place is invisible.
 
 Verify with your eyes: `<Dead Cells>/coremod/mods/TitleScreenTag/` now contains `TitleScreenTag.dll` and `modinfo.json`. If the folder is there but the game never loads it, come back and re-check this exact listing first - nine times out of ten the folder structure is the problem, not the code.
 
@@ -109,7 +109,7 @@ Why learn the exit before you need it? Mods installed this way leave no residue 
 - **Build errors about the MDK package.** No internet during first build (the package must download once), or the version number is wrong. Check your connection and the exact version string.
 - **Build succeeds but the mod never loads.** The `ModMain` name does not match the code, or you deployed the wrong folder (Debug instead of Release, or the DLL without its folder). Re-check Steps 2 through 4 in order.
 - **Warnings ignored, hook silently dead.** Go back to zero warnings. The warning text is the diagnosis - read it fully before changing anything.
-- **Checking `bin/`, `obj/`, or `*.pak` files into git.** These are baked outputs, not ingredients. The handbook's `.gitignore` already excludes them - if git shows them as new files, your ignore file is missing or in the wrong folder.
+- **Checking `bin/`, `obj/`, or `*.pak` files into git.** These are generated build outputs, not source files you wrote. The handbook's `.gitignore` already excludes them - if git shows them as new files, your ignore file is missing or in the wrong folder.
 
 ## Safety and rollback
 

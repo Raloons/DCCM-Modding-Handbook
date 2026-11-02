@@ -6,8 +6,8 @@ Get a working game plus framework install you can mod safely. This page assumes 
 
 Before touching anything, here is the cast of characters. You will see these words everywhere in this handbook:
 
-- **Dead Cells (the game).** The game you bought on Steam. It lives in a folder on your disk, something like `C:\Program Files (x86)\Steam\steamapps\common\Dead Cells`. Think of it as a restaurant kitchen: it works fine on its own, and we are not going to rearrange it.
-- **DCCM (Dead Cells Core Modding).** The community framework that lets mods plug into the game. Think of it as an extension counter added onto the kitchen: the kitchen still cooks the same way, but now there is a place where your dishes can be served. DCCM and its docs are here:
+- **Dead Cells (the game).** The game you bought on Steam. It lives in a folder on your disk, something like `C:\Program Files (x86)\Steam\steamapps\common\Dead Cells`. It runs fine on its own, and installing the framework does not modify the game's own files.
+- **DCCM (Dead Cells Core Modding).** The community framework that lets mods plug into the game. It adds loading and hook infrastructure alongside the game without changing how the base game itself works. DCCM and its docs are here:
   - [DCCM GitHub](https://github.com/dead-cells-core-modding/core)
   - [DCCM docs](https://dead-cells-core-modding.github.io/docs/)
 - **The modded launcher (`DeadCellsModding.exe`).** A special way of starting the game with the framework switched on. The normal Steam Play button starts the game *without* mods. This distinction is the single most common beginner confusion, so say it back to yourself: *mods only load under the modded launcher.*
@@ -29,7 +29,7 @@ Why this matters: a framework built for one version of the game may not understa
 
 Follow the DCCM project's own installation instructions for your game version (linked above). Do not improvise this step: the framework must land in exactly the right place inside your game folder.
 
-In everyday terms: you are bolting the extension counter onto the kitchen. If it is bolted in the wrong place, nothing you serve later will reach the customers, and the errors will look mysterious. When the install is correct, your game folder contains the modded launcher and a `coremod` folder.
+In everyday terms: you are installing the framework's loader files into the game folder. If files land in the wrong place, mods will not be found, and the resulting errors will look mysterious. When the install is correct, your game folder contains the modded launcher and a `coremod` folder.
 
 Verify with your eyes, right now:
 
