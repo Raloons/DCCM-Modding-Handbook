@@ -13,9 +13,9 @@
   letter-spacing: -0.02em;
 }
 
-/* Nudge the header title text down 3px to align with the logo. */
+/* Nudge the header title text down to align with the logo. */
 .md-header__title {
-  transform: translateY(3px);
+  transform: translateY(6px);
 }
 
 /* Body copy 2px smaller than the 16px Material default
