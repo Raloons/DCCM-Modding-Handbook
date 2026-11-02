@@ -1,5 +1,7 @@
 # Custom Levels and Biomes
 
+## THIS IS VERY INCOMPLETE! I am still attempting to figure out a way to make custom biomes work out better. What I have currently found has lots of glitches and can crash frequently. Attempt at your own risk.
+
 Add a custom room to the game without breaking generation, travel, saves, or other mods. This guide builds a read-only merge observer, a disposable-fixture workflow, an offline validation script, and the four-gate path from catalog presence to a walkable room. Level work is the highest-risk area in this handbook - follow the safety sections exactly.
 
 **You will produce:** a `TutObserver` merge diagnostic, a `TutRoom` one-room additive package, an offline validator, and a fixture runbook with acceptance records.
