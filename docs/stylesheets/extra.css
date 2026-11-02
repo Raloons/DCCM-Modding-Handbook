@@ -13,6 +13,11 @@
   letter-spacing: -0.02em;
 }
 
+/* Nudge the header title text down 3px to align with the logo. */
+.md-header__title {
+  transform: translateY(3px);
+}
+
 /* Body copy 2px smaller than the 16px Material default
    (Material 9 uses a 20px root, so 14px = 0.7rem). */
 .md-typeset {
