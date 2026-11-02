@@ -89,8 +89,6 @@ public static class WavebladeCombat
         return new BackStabber(hero, item);
     }
 
-    // Fail-open identity check: anything unexpected (null item/data/id) is not
-    // Waveblade, so vanilla and SquireBlade swings can never be broken by this hook.
     private static bool IsWavebladeItem(InventItem item)
     {
         try
@@ -108,9 +106,6 @@ public static class WavebladeCombat
         if (weapon == null || !IsWavebladeItem(weapon.item))
             return original(weapon!);
 
-        // One event per released strike, before _executeImpl advances the combo.
-        // False means a melee miss, so it must not suppress emission.
-        // Nested re-entry for this native weapon cannot emit another wave.
         var key = weapon.HashlinkPointer;
         bool outermost = executing.Add(key);
         try
@@ -143,8 +138,6 @@ public static class WavebladeCombat
 
     public static void EmitSlash(BackStabber weapon)
     {
-        // Snapshot strike damage before combo advancement. Native Bullet owns
-        // faction, collision, affixes, hit dispatch and cleanup.
         // Vanilla template: SonicCrossbow.shoot (f@35822): SonicBolt at spd 1.5,
         // init, radius 19.2, shootFromWeapon, maxDist override. BulletBlade
         // (f@35272) confirms the new-Bullet + init + shootFromWeapon shape.
@@ -167,14 +160,11 @@ public static class WavebladeCombat
             double xOff = 0.0, yOff = 0.0;
             slash.shootFromWeapon(weapon, ref useAmmo, ref xOff, ref yOff);
             MoveOriginToBladeTip(weapon, slash);
-            slash.maxDist = 800.0; // Pixels, not cx tiles. Provisional intended M31 cap.
-            slash.pierceCount = 0; // Native destroy-on-first-target-hit.
+            slash.maxDist = 800.0; // Pixels, not cx tiles.
+            slash.pierceCount = 0;
         }
         catch
         {
-            // init() registers the projectile with the level; a later failure
-            // must not orphan it. Best effort only: never mask the emission
-            // error and never destroy twice.
             try { if (!slash.destroyed) slash.destroy(); }
             catch (Exception destroyEx) { Log.Error(destroyEx, "Waveblade M36: slash cleanup failed"); }
             throw;

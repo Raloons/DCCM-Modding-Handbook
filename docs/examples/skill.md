@@ -71,9 +71,8 @@ public static class ReserveBatteryRuntime
 
     // Gate BEFORE any native activation work: a rejected use must not consume
     // cooldown, kill entities, or play success effects (the denied cue remains).
-    // Mirrors the verified native
-    // order (onActiveSkill starts cooldown, then dispatches useSkillItem), so
-    // the gate has to live here, not in Use.
+    // Mirrors the verified native order (onActiveSkill starts cooldown, then
+    // dispatches useSkillItem), so the gate has to live here, not in Use.
     public static void Activation(OrigActivation orig, dc.tool.hero.HeroActiveSkillsManager self, int id, double ratio)
     {
         InventItem? item = null;
@@ -87,7 +86,7 @@ public static class ReserveBatteryRuntime
             {
                 Log.Information("ReserveBattery activation refused ({Reason}); cooldown untouched", reason);
                 PlayDeniedCue();
-                return; // genuine no-op: orig never runs, no cooldown consumed
+                return;
             }
         }
         catch (Exception ex)
@@ -135,8 +134,6 @@ public static class ReserveBatteryRuntime
         }
     }
 
-    // Native slot scan: the other equipped skill is whatever non-RB item sits
-    // in a different active slot and still has a live HeroActiveSkill entry.
     internal static bool TryFindRefreshTarget(
         dc.tool.hero.HeroActiveSkillsManager manager, int activatorSlot,
         out InventItem? target, out string reason)
@@ -182,10 +179,6 @@ public static class ReserveBatteryRuntime
         return false;
     }
 
-    // Success-only blue pulse: a small elecNova pop centered on the Beheaded.
-    // This presentation call creates no attack object. Native on-use affixes
-    // remain part of the enclosing activation. Called only after a successful refresh -
-    // the refused-activation and skipped-use paths return before reaching it.
     // Any failure is logged and swallowed: the refresh already applied.
     private static void PlaySuccessFlash(dc.tool.hero.HeroActiveSkillsManager manager)
     {
@@ -254,26 +247,14 @@ public static class ReserveBatteryRules
     public enum Gate { Proceed, NoTarget, TargetReady, TargetIsReserveBattery, TargetHasNoSkill }
 
     // Affix eligibility follows Tonic (ExtraHeal) natively: RB carries the
-    // same NoDamage tag, so every generation path (tryAddAffixes f@15657 group
-    // 3/2 draws via the f@31711 predicate, tier affixes, forge rerolls,
-    // checked addAffix) evaluates RB through the identical native tag rules.
-    // Verified delta: Tonic additionally carries Heal + HasDuration; the only
-    // affixes Tonic can roll that RB cannot are the six req-HasDuration
-    // duration-end triggers (incompatible with an instant skill, excluded by
-    // native requiredTags). Conversely GlobalShieldOnUse is RB-only because
-    // its native forbiddenItem list names Tonic. These are two-sided deltas,
-    // with no hand-written whitelist or blacklist anywhere in behavior.
+    // same NoDamage tag, so generation evaluates RB through the identical
+    // native tag rules. No hand-written whitelist or blacklist in behavior.
 
     public readonly record struct GateDecision(Gate Outcome, string Reason)
     {
         public bool Proceed => Outcome == Gate.Proceed;
     }
 
-    // Pure gate: the only refreshable target is a NON-Reserve-Battery skill
-    // whose underlying OldSkill.coolDownF is still running (remainingF > 0).
-    // getNextUseCooldownF is recharge progress, not this remaining timer.
-    // Everything else
-    // refuses activation, and refusal must never consume cooldown.
     public static GateDecision Decide(bool otherSlotOccupied, bool otherIsReserveBattery, bool otherHasSkillEntry, double otherCooldownRemainingF)
     {
         if (!otherSlotOccupied) return new GateDecision(Gate.NoTarget, "other slot empty");

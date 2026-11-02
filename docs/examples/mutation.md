@@ -254,7 +254,7 @@ namespace BtdMutations
                     if (e == null || e is Hero) continue;
                     if (e is not Mob mob) continue;
                     int uid = SafeUid(mob);
-                    if (uid == victimUid) continue; // never self-refresh the source
+                    if (uid == victimUid) continue;
                     int life = 0;
                     bool destroyed = true;
                     try { life = mob.life; destroyed = mob.destroyed; } catch { continue; }
