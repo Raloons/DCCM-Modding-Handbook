@@ -1,4 +1,4 @@
-// HelloTitle - educational DCCM example (independent, no game code copied).
+// TitleScreenTag - educational DCCM example (independent, no game code copied).
 //
 // Appends a suffix to the title-screen build label using an orig-first,
 // fail-open hook. Demonstrates the minimal safe modding pattern only.
@@ -7,11 +7,11 @@ using HaxeProxy.Runtime;
 using ModCore.Mods;
 using Serilog;
 
-namespace HelloTitle;
+namespace TitleScreenTag;
 
-public class HelloTitleMod(ModInfo info) : ModBase(info)
+public class TitleScreenTagMod(ModInfo info) : ModBase(info)
 {
-    private const string Suffix = "HelloTitle - Dev Build";
+    private const string Suffix = "TitleScreenTag - Dev Build";
 
     private bool initialized;
 
@@ -24,7 +24,7 @@ public class HelloTitleMod(ModInfo info) : ModBase(info)
         HashlinkHooks.Instance
             .CreateHook("pr.TitleScreen", "setMiscTexts", SetMiscTexts)
             .Enable();
-        Logger.Information("HelloTitle: hook attached");
+        Logger.Information("TitleScreenTag: hook attached");
     }
 
     private void SetMiscTexts(OrigSetMiscTexts orig, object self)
@@ -42,7 +42,7 @@ public class HelloTitleMod(ModInfo info) : ModBase(info)
         }
         catch (Exception ex)
         {
-            Logger.Warning(ex, "HelloTitle: label append failed; leaving stock label");
+            Logger.Warning(ex, "TitleScreenTag: label append failed; leaving stock label");
         }
     }
 }

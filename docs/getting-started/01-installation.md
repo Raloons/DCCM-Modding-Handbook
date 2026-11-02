@@ -23,13 +23,13 @@ You need: a Steam copy of **Dead Cells** (these tutorials reference game version
 
 Open Steam, right-click Dead Cells, and confirm which version you have. DCCM releases support specific game versions, and mixing them is the most common installation failure.
 
-What does this mean? A framework built for one version of the game may not understand another version's internals. Version-matching is not optional polish; it is the foundation everything else stands on. The reference pairing for these tutorials is game **v35** with DCCM **35.13.8**. If your versions differ, check the DCCM release notes for the pairing you need before continuing.
+Why this matters: a framework built for one version of the game may not understand another version's internals. Version-matching is not optional polish; it is the foundation everything else stands on. The reference pairing for these tutorials is game **v35** with DCCM **35.13.8**. If your versions differ, check the DCCM release notes for the pairing you need before continuing.
 
 ## Step 2 - Install DCCM
 
 Follow the DCCM project's own installation instructions for your game version (linked above). Do not improvise this step: the framework must land in exactly the right place inside your game folder.
 
-What does this mean? You are bolting the extension counter onto the kitchen. If it is bolted in the wrong place, nothing you serve later will reach the customers, and the errors will look mysterious. When the install is correct, your game folder contains the modded launcher and a `coremod` folder.
+In everyday terms: you are bolting the extension counter onto the kitchen. If it is bolted in the wrong place, nothing you serve later will reach the customers, and the errors will look mysterious. When the install is correct, your game folder contains the modded launcher and a `coremod` folder.
 
 Verify with your eyes, right now:
 
@@ -43,7 +43,7 @@ If any of the three is missing, stop. Re-read the DCCM install instructions. Do 
 
 Find your Dead Cells save folder under your Steam userdata directory and copy the entire Dead Cells save folder somewhere safe, like `Documents\DeadCells-Save-Backup-<today's date>\`. Confirm the copy by comparing folder sizes or file counts: the backup must match the original.
 
-What does this mean? Think of this as photocopying an important document before letting anyone borrow it. Title-screen mods barely touch saves, but gameplay mods later absolutely can, and swapping between modded and vanilla launches on the same run without a backup is how progress gets damaged. The habit starts here, on day one, when it is easy - so that it is automatic later when it matters.
+An analogy that sticks: photocopying an important document before letting anyone borrow it. Title-screen mods barely touch saves, but gameplay mods later absolutely can, and swapping between modded and vanilla launches on the same run without a backup is how progress gets damaged. The habit starts here, on day one, when it is easy - so that it is automatic later when it matters.
 
 How to know the backup worked: open the backup folder and confirm it contains the same files as the original (same names, same sizes). A backup you have not verified is a hope, not a backup.
 
@@ -51,7 +51,7 @@ How to know the backup worked: open the backup folder and confirm it contains th
 
 Double-click `DeadCellsModding.exe` directly (not the Steam Play button). Reach the title screen, then close the game normally through its own menus.
 
-What does this mean? You just proved the framework itself works on your machine with zero mods involved. This gives you a clean baseline: if a later mod breaks something, you already know the launcher alone was fine, so the mod is the suspect - not your install. Check `coremod/logs/` afterward and confirm a fresh log file was written. That log file is where you will look first for every future problem.
+Why bother launching with no mods? You just proved the framework itself works on your machine with zero mods involved. This gives you a clean baseline: if a later mod breaks something, you already know the launcher alone was fine, so the mod is the suspect - not your install. Check `coremod/logs/` afterward and confirm a fresh log file was written. That log file is where you will look first for every future problem.
 
 ## Common beginner failures
 

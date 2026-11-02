@@ -5,9 +5,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
-    <ModName>HelloTitle</ModName>
+    <ModName>TitleScreenTag</ModName>
     <ModType>mod</ModType>
-    <ModMain>HelloTitle.HelloTitleMod</ModMain>
+    <ModMain>TitleScreenTag.TitleScreenTagMod</ModMain>
     <Authors>DCCM Modding Handbook (educational example)</Authors>
   </PropertyGroup>
 

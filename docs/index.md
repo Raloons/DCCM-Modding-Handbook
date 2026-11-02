@@ -8,7 +8,7 @@ New to DCCM modding? Work through these in order:
 
 - [Installation](getting-started/01-installation.md) - game + framework versions, launcher, folder layout, save backups.
 - [Dev Environment](getting-started/02-dev-environment.md) - .NET SDK, MDK reference, project layout, deployment.
-- [Your First Mod](getting-started/03-first-mod.md) - minimal `HelloTitle` mod with one safe hook.
+- [Your First Mod](getting-started/03-first-mod.md) - minimal `TitleScreenTag` mod with one safe hook.
 
 ## Handbook Sections
 
@@ -20,7 +20,7 @@ New to DCCM modding? Work through these in order:
 | [Levels & Biomes](levels-biomes/index.md) | In-depth tutorial: observer, fixture, validator, walkable room |
 | [Game Data](game-data/index.md) | In-depth tutorial: packaging, validation suite, five-load proof |
 | [Debugging & Testing](debugging-testing/index.md) | Planned outline |
-| [HelloTitle example](examples/hello-title/README.md) | Complete educational example |
+| [TitleScreenTag example](examples/title-screen-tag/README.md) | Complete educational example |
 
 ## Requirements
 

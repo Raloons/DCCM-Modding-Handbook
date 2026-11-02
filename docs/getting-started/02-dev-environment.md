@@ -19,11 +19,11 @@ Install .NET SDK 10.0, then open a terminal (PowerShell on Windows) and run:
 dotnet --version
 ```
 
-What does this mean? You are asking the oven to introduce itself. Expected output is a version number starting with `10.` (for example `10.0.100`). If the command is not recognized, the SDK did not install correctly or the terminal was opened before installation finished - close and reopen the terminal first, then reinstall if it still fails. Do not continue until this command prints a version: nothing else in this page works without it.
+Reading that output: you just asked the oven to introduce itself. Expected output is a version number starting with `10.` (for example `10.0.100`). If the command is not recognized, the SDK did not install correctly or the terminal was opened before installation finished - close and reopen the terminal first, then reinstall if it still fails. Do not continue until this command prints a version: nothing else in this page works without it.
 
 ## Step 2 - Create the project file, line by line
 
-Create a folder for your mod (example: `HelloTitle`), and inside it create `HelloTitle.csproj` with this content. Then read what every line means - there are no filler lines here:
+Create a folder for your mod (example: `TitleScreenTag`), and inside it create `TitleScreenTag.csproj` with this content. Then read what every line means - there are no filler lines here:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -31,9 +31,9 @@ Create a folder for your mod (example: `HelloTitle`), and inside it create `Hell
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <ModName>HelloTitle</ModName>
+    <ModName>TitleScreenTag</ModName>
     <ModType>mod</ModType>
-    <ModMain>HelloTitle.HelloTitleMod</ModMain>
+    <ModMain>TitleScreenTag.TitleScreenTagMod</ModMain>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DeadCellsCoreModding.MDK" Version="1.0.1" />
@@ -47,9 +47,9 @@ What does this mean, line by line?
 - `<TargetFramework>net10.0</TargetFramework>` - "Bake this with .NET 10." This must match your installed SDK's major version and the framework's expectation. Wrong version here means the game may refuse to load the result.
 - `<ImplicitUsings>enable</ImplicitUsings>` - "Let me skip repetitive boilerplate at the top of code files." Pure convenience; it changes nothing about what your mod can do.
 - `<Nullable>enable</Nullable>` - "Warn me when I might be using something empty." This turns whole categories of crashes into build warnings you can fix before ever launching the game. Keep it on.
-- `<ModName>HelloTitle</ModName>` - "My mod is called HelloTitle." This name becomes the output folder name and how the framework identifies your mod. Use one word, no spaces.
+- `<ModName>TitleScreenTag</ModName>` - "My mod is called TitleScreenTag." This name becomes the output folder name and how the framework identifies your mod. Use one word, no spaces.
 - `<ModType>mod</ModType>` - "This is a regular mod." (The toolchain supports other types; yours is `mod`.)
-- `<ModMain>HelloTitle.HelloTitleMod</ModMain>` - "When you load my mod, start with the `HelloTitleMod` class inside the `HelloTitle` group." This is the front door of your mod. If this name does not exactly match your code file's names, the framework cannot find the door and your mod silently does nothing.
+- `<ModMain>TitleScreenTag.TitleScreenTagMod</ModMain>` - "When you load my mod, start with the `TitleScreenTagMod` class inside the `TitleScreenTag` group." This is the front door of your mod. If this name does not exactly match your code file's names, the framework cannot find the door and your mod silently does nothing.
 - `<PackageReference ... MDK ... />` - "Plug in the Mod Development Kit, version 1.0.1." This is the plumbing that generates your manifest and packages assets. Exact version matters: different MDK versions can generate different manifests.
 
 ## Step 3 - Build, and read the output like a checklist
@@ -60,7 +60,7 @@ In the mod folder, run:
 dotnet build -c Release
 ```
 
-What does this mean? You told the oven to bake the dish (`build`), using the final recipe (`-c Release` means the optimized release version, not the draft debug version you would use while developing).
+In plain language: you told the oven to bake the dish (`build`), using the final recipe (`-c Release` means the optimized release version, not the draft debug version you would use while developing).
 
 Expected output ends with:
 
@@ -70,7 +70,7 @@ Build succeeded.
     0 Error(s)
 ```
 
-What does this mean? The translation from code to runnable mod worked with zero complaints. The numbers matter enormously:
+How to read those numbers: the translation from code to runnable mod worked with zero complaints. The numbers matter enormously:
 
 - **Errors (must be 0):** the bake failed; nothing usable was produced. Read the error text - it names the file and line number. Fix and rebuild.
 - **Warnings (must be 0):** the bake worked, but the oven is uneasy. In modding, warnings in hook code almost always mean a name or signature mismatch that will fail *silently* in game (your hook simply never fires, with no crash to point at the cause). Treat every warning as a bug. Fix and rebuild.
@@ -78,8 +78,8 @@ What does this mean? The translation from code to runnable mod worked with zero 
 After a clean build, confirm the finished dish exists:
 
 ```
-bin/Release/net10.0/output/HelloTitle/
-  HelloTitle.dll      <-- your compiled mod
+bin/Release/net10.0/output/TitleScreenTag/
+  TitleScreenTag.dll      <-- your compiled mod
   modinfo.json        <-- the generated manifest
 ```
 
@@ -87,21 +87,21 @@ Open `modinfo.json` and confirm the mod name and entry point match what you wrot
 
 ## Step 4 - Deploy (copy the dish to the counter)
 
-Copy the entire `output/HelloTitle/` folder into the game's mod folder:
+Copy the entire `output/TitleScreenTag/` folder into the game's mod folder:
 
 ```powershell
-Copy-Item -Recurse bin/Release/net10.0/output/HelloTitle '<Dead Cells>/coremod/mods/'
+Copy-Item -Recurse bin/Release/net10.0/output/TitleScreenTag '<Dead Cells>/coremod/mods/'
 ```
 
-What does this mean? Replace `<Dead Cells>` with your real game folder. You are placing your finished dish on the extension counter from the Installation page. Note what you copy: the *whole folder*, not just the DLL. The framework discovers mods by scanning subfolders of `coremod/mods/` - a lone DLL dropped in the wrong place is invisible.
+Put simply: replace `<Dead Cells>` with your real game folder. You are placing your finished dish on the extension counter from the Installation page. Note what you copy: the *whole folder*, not just the DLL. The framework discovers mods by scanning subfolders of `coremod/mods/` - a lone DLL dropped in the wrong place is invisible.
 
-Verify with your eyes: `<Dead Cells>/coremod/mods/HelloTitle/` now contains `HelloTitle.dll` and `modinfo.json`. If the folder is there but the game never loads it, come back and re-check this exact listing first - nine times out of ten the folder structure is the problem, not the code.
+Verify with your eyes: `<Dead Cells>/coremod/mods/TitleScreenTag/` now contains `TitleScreenTag.dll` and `modinfo.json`. If the folder is there but the game never loads it, come back and re-check this exact listing first - nine times out of ten the folder structure is the problem, not the code.
 
 ## Step 5 - Uninstall (know the exit before you need it)
 
-Delete `<Dead Cells>/coremod/mods/HelloTitle/`. That is the entire uninstall procedure. Launch the game and confirm everything is exactly as before.
+Delete `<Dead Cells>/coremod/mods/TitleScreenTag/`. That is the entire uninstall procedure. Launch the game and confirm everything is exactly as before.
 
-What does this mean? Mods installed this way leave no residue when their folder is removed (as long as they only added content and never overwrote stock files - which is why this handbook always teaches additive mods). Knowing the exit makes experimenting fearless: at any point, one deleted folder returns you to vanilla.
+Why learn the exit before you need it? Mods installed this way leave no residue when their folder is removed (as long as they only added content and never overwrote stock files - which is why this handbook always teaches additive mods). Knowing the exit makes experimenting fearless: at any point, one deleted folder returns you to vanilla.
 
 ## Common beginner failures
 

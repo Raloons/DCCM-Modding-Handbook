@@ -1,8 +1,8 @@
-# Your First Mod: HelloTitle (status: educational example)
+# Your First Mod: TitleScreenTag (status: educational example)
 
 Build a minimal mod that appends text to the title-screen build label. You will write one code file, understand every line of it, deploy it, and watch the game obey it. This is an independently written teaching example that demonstrates the core pattern of all DCCM modding: an orig-first, fail-open hook.
 
-**You will produce:** a working `HelloTitle` mod deployed in your game.
+**You will produce:** a working `TitleScreenTag` mod deployed in your game.
 **You will verify:** the hook attaches (log line), the label changes (visible on screen), and removal restores vanilla.
 
 ## What is a hook? (read this first)
@@ -18,18 +18,18 @@ With that mental picture, the code below will make sense line by line.
 
 ## Step 1 - Create the code file, line by line
 
-In your `HelloTitle` project folder (next to the `.csproj` from [Dev Environment](02-dev-environment.md)), create `HelloTitleMod.cs`:
+In your `TitleScreenTag` project folder (next to the `.csproj` from [Dev Environment](02-dev-environment.md)), create `TitleScreenTagMod.cs`:
 
 ```csharp
 using HaxeProxy.Runtime;
 using ModCore.Mods;
 using Serilog;
 
-namespace HelloTitle;
+namespace TitleScreenTag;
 
-public class HelloTitleMod(ModInfo info) : ModBase(info)
+public class TitleScreenTagMod(ModInfo info) : ModBase(info)
 {
-    private const string Suffix = "HelloTitle - Dev Build";
+    private const string Suffix = "TitleScreenTag - Dev Build";
 
     private bool initialized;
 
@@ -42,7 +42,7 @@ public class HelloTitleMod(ModInfo info) : ModBase(info)
         HashlinkHooks.Instance
             .CreateHook("pr.TitleScreen", "setMiscTexts", SetMiscTexts)
             .Enable();
-        Logger.Information("HelloTitle: hook attached");
+        Logger.Information("TitleScreenTag: hook attached");
     }
 
     private void SetMiscTexts(OrigSetMiscTexts orig, object self)
@@ -61,7 +61,7 @@ public class HelloTitleMod(ModInfo info) : ModBase(info)
         catch (Exception ex)
         {
             // Fail open: log and leave the stock label alone.
-            Logger.Warning(ex, "HelloTitle: label append failed");
+            Logger.Warning(ex, "TitleScreenTag: label append failed");
         }
     }
 }
@@ -70,13 +70,13 @@ public class HelloTitleMod(ModInfo info) : ModBase(info)
 Now, what does this mean? Going top to bottom:
 
 - The three `using` lines are address books: they tell the compiler where `ModBase`, `HashlinkHooks`, and `Logger` live so you can use their short names. Without them you would have to write full addresses everywhere.
-- `namespace HelloTitle;` puts your code in a labeled box with your mod's name, so it cannot collide with the game's code or other mods' code. This must match the first half of `ModMain` in your project file.
-- `public class HelloTitleMod(ModInfo info) : ModBase(info)` declares your mod itself: "HelloTitleMod is a ModBase (a loadable mod), and here is how it receives its info." This must match the second half of `ModMain`. If these names disagree with the project file, the framework knocks on a door that does not exist and your mod silently never loads.
+- `namespace TitleScreenTag;` puts your code in a labeled box with your mod's name, so it cannot collide with the game's code or other mods' code. This must match the first half of `ModMain` in your project file.
+- `public class TitleScreenTagMod(ModInfo info) : ModBase(info)` declares your mod itself: "TitleScreenTagMod is a ModBase (a loadable mod), and here is how it receives its info." This must match the second half of `ModMain`. If these names disagree with the project file, the framework knocks on a door that does not exist and your mod silently never loads.
 - `private const string Suffix = ...` is your mod's text, stored in one place with a name. Changing the label later means editing this one line, not hunting through logic.
 - `private bool initialized;` plus the `if (initialized) return;` guard mean "set up exactly once even if the framework calls `Initialize` twice." Double-attaching a hook would run your code twice per event - this two-line guard prevents a whole class of duplication bugs. Use it in every mod.
 - `public delegate void OrigSetMiscTexts(object self);` describes the *shape* of the original function: what it takes in (the screen object) and that it returns nothing. Think of it as a mold the framework uses to hand you the original. The shape must match reality - a wrong shape here is the classic "hook never fires" bug.
 - `HashlinkHooks.Instance.CreateHook("pr.TitleScreen", "setMiscTexts", SetMiscTexts)` is the tap on the phone line: "when the title screen sets its miscellaneous texts, also call my `SetMiscTexts`." The first two strings name *whose* function and *which* function - copy them exactly from the API docs. `.Enable()` switches the tap on; without it, everything is wired but nothing flows.
-- `Logger.Information("HelloTitle: hook attached")` writes one line in the game's diary (`coremod/logs/`). This is your smoke signal: if this line exists, your mod loaded and its setup ran. If it is absent, nothing else matters yet - go fix loading first.
+- `Logger.Information("TitleScreenTag: hook attached")` writes one line in the game's diary (`coremod/logs/`). This is your smoke signal: if this line exists, your mod loaded and its setup ran. If it is absent, nothing else matters yet - go fix loading first.
 - Inside `SetMiscTexts`, `orig(self);` runs the original first (rule 1: let the speaker finish). Only then does your code read the label the game just set.
 - `dynamic screen = self;` says "treat this object flexibly." The game's screen object has fields like `build` (the label); `dynamic` lets you reach them by name.
 - `if (screen.build == null) return;` is a guard: "if there is no label here, walk away quietly." Screens change between game versions; this line keeps your mod alive when the label is absent instead of crashing.
@@ -90,31 +90,31 @@ Now, what does this mean? Going top to bottom:
 dotnet build -c Release
 ```
 
-What does this mean? Bake the dish (see [Dev Environment](02-dev-environment.md) Step 3). You need `Build succeeded. 0 Warning(s) 0 Error(s)`. A warning here - especially about the delegate or the hook call - means your mold does not match the real function, and the hook will silently never fire in game. Fix warnings now; they are ten times harder to diagnose from inside the game.
+Same idea as last page: bake the dish (see [Dev Environment](02-dev-environment.md) Step 3). You need `Build succeeded. 0 Warning(s) 0 Error(s)`. A warning here - especially about the delegate or the hook call - means your mold does not match the real function, and the hook will silently never fire in game. Fix warnings now; they are ten times harder to diagnose from inside the game.
 
 ## Step 3 - Deploy it
 
 ```powershell
-Copy-Item -Recurse bin/Release/net10.0/output/HelloTitle '<Dead Cells>/coremod/mods/'
+Copy-Item -Recurse bin/Release/net10.0/output/TitleScreenTag '<Dead Cells>/coremod/mods/'
 ```
 
-What does this mean? Place the whole finished folder on the extension counter (same as Dev Environment Step 4). Confirm `<Dead Cells>/coremod/mods/HelloTitle/` contains `HelloTitle.dll` and `modinfo.json` before launching - if this listing is wrong, no code on Earth will make the mod load.
+The short version: place the whole finished folder on the extension counter (same as Dev Environment Step 4). Confirm `<Dead Cells>/coremod/mods/TitleScreenTag/` contains `TitleScreenTag.dll` and `modinfo.json` before launching - if this listing is wrong, no code on Earth will make the mod load.
 
 ## Step 4 - Launch and verify (two proofs)
 
 Launch **only** via `DeadCellsModding.exe`. Never the vanilla Steam Play button for modded testing - the vanilla game does not load the framework, so your mod will be absent and you will debug a problem that does not exist.
 
-**Proof 1 - the diary.** Open `coremod/logs/log_latest.log` and search for `HelloTitle: hook attached`. Found it? Your mod loaded and its setup ran. Absent? Stop - the problem is loading (folder placement, manifest, entry-point names), not your hook logic. Do not touch the code until this line exists.
+**Proof 1 - the diary.** Open `coremod/logs/log_latest.log` and search for `TitleScreenTag: hook attached`. Found it? Your mod loaded and its setup ran. Absent? Stop - the problem is loading (folder placement, manifest, entry-point names), not your hook logic. Do not touch the code until this line exists.
 
-**Proof 2 - the screen.** Reach the title screen and look at the bottom-left label. It should read the game's version text followed by `| HelloTitle - Dev Build`. Seen it? Your hook fired, read the label, translated your text, and set it. The label is unchanged in meaning (game version still there) with your addition appended - the additive ideal.
+**Proof 2 - the screen.** Reach the title screen and look at the bottom-left label. It should read the game's version text followed by `| TitleScreenTag - Dev Build`. Seen it? Your hook fired, read the label, translated your text, and set it. The label is unchanged in meaning (game version still there) with your addition appended - the additive ideal.
 
-If Proof 1 passes but Proof 2 fails: the hook is attached but not firing or erroring. Search the log for `HelloTitle: label append failed` - the fail-open warning tells you exactly which side broke. A missing label object (`build == null`) means the screen layout differs from what the example expects; a translation error means the string handoff needs attention.
+If Proof 1 passes but Proof 2 fails: the hook is attached but not firing or erroring. Search the log for `TitleScreenTag: label append failed` - the fail-open warning tells you exactly which side broke. A missing label object (`build == null`) means the screen layout differs from what the example expects; a translation error means the string handoff needs attention.
 
 ## Step 5 - Uninstall and confirm vanilla
 
-Delete `<Dead Cells>/coremod/mods/HelloTitle/`, launch, and confirm the bottom-left label is back to exactly the game's own text.
+Delete `<Dead Cells>/coremod/mods/TitleScreenTag/`, launch, and confirm the bottom-left label is back to exactly the game's own text.
 
-What does this mean? You just proved the complete round trip: install, effect, clean removal. Every future mod you build should pass this same round trip before you call it done. The uninstall test is not extra credit; it is half the feature.
+Why this step earns its place: you just proved the complete round trip: install, effect, clean removal. Every future mod you build should pass this same round trip before you call it done. The uninstall test is not extra credit; it is half the feature.
 
 ## Step 6 - Experiments (do these - this is where understanding forms)
 
@@ -127,7 +127,7 @@ Change one thing at a time, rebuild, redeploy, and observe. Each experiment teac
 
 ## Common beginner failures
 
-- **No attach line in the log.** Loading problem, not logic problem. Re-check folder placement (`mods/HelloTitle/` with DLL plus manifest), `ModMain` names matching the code, and that you launched via `DeadCellsModding.exe`.
+- **No attach line in the log.** Loading problem, not logic problem. Re-check folder placement (`mods/TitleScreenTag/` with DLL plus manifest), `ModMain` names matching the code, and that you launched via `DeadCellsModding.exe`.
 - **Attach line present, label unchanged, no warning.** The hook name strings do not match reality. Copy them character-for-character from the API docs.
 - **Attach line present, label unchanged, warning present.** Read the warning - it names the failure. Missing label object means layout drift; translation errors mean string-handoff trouble.
 - **Crash on title screen.** Something outside the `try` block threw, or `orig` was skipped. Your fail-open net only covers code inside the `try` - keep every touch of game objects inside it.
@@ -139,6 +139,6 @@ This mod touches no saves, no data rows, and no assets: it reads one label and w
 
 ## Further reading
 
-- Full project source: `docs/examples/hello-title/` (this page explains that code line by line).
+- Full project source: `docs/examples/title-screen-tag/` (this page explains that code line by line).
 - [Custom Equipment](../custom-equipment/index.md) - your first real item, using this exact hook discipline.
 - [Debugging & Testing](../debugging-testing/index.md) - the log-first habit, formalized.

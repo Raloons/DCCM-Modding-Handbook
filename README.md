@@ -53,7 +53,7 @@ docs/
   levels-biomes/            Stub - planned
   game-data/                Stub - planned
   debugging-testing/        Stub - planned
-  examples/hello-title/     Minimal educational mod
+  examples/title-screen-tag/     Minimal educational mod
 ```
 
 ## Disclaimer
