@@ -139,6 +139,6 @@ This mod touches no saves, no data rows, and no assets: it reads one label and w
 
 ## Further reading
 
-- Full project source: `docs/examples/title-screen-tag/` (this page explains that code line by line).
+- The complete code above is the whole mod: one `.csproj` (Dev Environment Step 2) plus the single file on this page.
 - [Custom Equipment](../custom-equipment/index.md) - your first real item, using this exact hook discipline.
 - [Debugging & Testing](../debugging-testing/index.md) - the log-first habit, formalized.

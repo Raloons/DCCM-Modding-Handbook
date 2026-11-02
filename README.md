@@ -46,14 +46,13 @@ The project is intended to grow over time as techniques are documented, tested, 
 ```
 docs/
   index.md                  Handbook landing page
-  getting-started/          Finished tutorials (start here)
-  custom-equipment/         Stub - planned
-  animations-vfx/           Stub - planned
-  gameplay-mods/            Stub - planned
-  levels-biomes/            Stub - planned
-  game-data/                Stub - planned
+  getting-started/          Beginner tutorials (start here)
+  custom-equipment/         In-depth tutorial
+  animations-vfx/           In-depth tutorial
+  gameplay-mods/            In-depth tutorial
+  levels-biomes/            In-depth tutorial
+  game-data/                In-depth tutorial
   debugging-testing/        Stub - planned
-  examples/title-screen-tag/     Minimal educational mod
 ```
 
 ## Disclaimer

@@ -20,7 +20,6 @@ New to DCCM modding? Work through these in order:
 | [Levels & Biomes](levels-biomes/index.md) | In-depth tutorial: observer, fixture, validator, walkable room |
 | [Game Data](game-data/index.md) | In-depth tutorial: packaging, validation suite, five-load proof |
 | [Debugging & Testing](debugging-testing/index.md) | Planned outline |
-| [TitleScreenTag example](examples/title-screen-tag/README.md) | Complete educational example |
 
 ## Requirements
 
