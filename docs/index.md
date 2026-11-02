@@ -6,6 +6,7 @@
 
 New to DCCM modding? Work through these in order:
 
+- [Terminology](getting-started/00-terminology.md) - what Hero, Mob, CDB, ticks, and tags mean in code.
 - [Installation](getting-started/01-installation.md) - game + framework versions, launcher, folder layout, save backups.
 - [Dev Environment](getting-started/02-dev-environment.md) - .NET SDK, MDK reference, project layout, deployment.
 - [Your First Mod](getting-started/03-first-mod.md) - minimal `TitleScreenTag` mod with one safe hook.

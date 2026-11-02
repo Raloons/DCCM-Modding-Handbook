@@ -59,6 +59,7 @@ extra_css:
 nav:
   - Home: index.md
   - Getting Started:
+      - Terminology: getting-started/00-terminology.md
       - Installation: getting-started/01-installation.md
       - Dev Environment: getting-started/02-dev-environment.md
       - Your First Mod: getting-started/03-first-mod.md
