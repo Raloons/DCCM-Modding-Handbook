@@ -20,7 +20,7 @@ New to DCCM modding? Work through these in order:
 | [Gameplay Mods](gameplay-mods/index.md) | In-depth tutorial: gates, windows, probes, test protocol |
 | [Levels & Biomes](levels-biomes/index.md) | In-depth tutorial: observer, fixture, validator, walkable room |
 | [Game Data](game-data/index.md) | In-depth tutorial: packaging, validation suite, five-load proof |
-| [Debugging & Testing](debugging-testing/index.md) | Planned outline |
+| [Debugging & Testing](debugging-testing/index.md) | In-depth tutorial: logs, fixtures, probes, proof |
 | [Melee Weapon example](examples/melee-weapon.md) | Real code: Waveblade entry point |
 | [Skill example](examples/skill.md) | Real code: Reserve Battery entry point |
 | [Affix example](examples/affix.md) | Real code: Pure Nail pogo policy |
