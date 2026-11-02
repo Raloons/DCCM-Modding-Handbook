@@ -14,11 +14,11 @@ New to DCCM modding? Work through these in order:
 
 | Section | Status |
 |---|---|
-| [Custom Equipment](custom-equipment/index.md) | Planned outline |
-| [Animations & VFX](animations-vfx/index.md) | Planned outline |
-| [Gameplay Mods](gameplay-mods/index.md) | Planned outline |
-| [Levels & Biomes](levels-biomes/index.md) | Planned outline |
-| [Game Data](game-data/index.md) | Planned outline |
+| [Custom Equipment](custom-equipment/index.md) | Tutorial: first weapon and skill patterns |
+| [Animations & VFX](animations-vfx/index.md) | Tutorial: additive visuals and UI placement |
+| [Gameplay Mods](gameplay-mods/index.md) | Tutorial: gates, windows, and per-hit probes |
+| [Levels & Biomes](levels-biomes/index.md) | Tutorial: merge observer and first additive room |
+| [Game Data](game-data/index.md) | Tutorial: packaging overlays and the five-load proof |
 | [Debugging & Testing](debugging-testing/index.md) | Planned outline |
 | [HelloTitle example](examples/hello-title/README.md) | Complete educational example |
 

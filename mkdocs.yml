@@ -64,9 +64,9 @@ nav:
       - Your First Mod: getting-started/03-first-mod.md
   - Examples:
       - HelloTitle Overview: examples/hello-title/README.md
-  - Custom Equipment (planned): custom-equipment/index.md
-  - Animations & VFX (planned): animations-vfx/index.md
-  - Gameplay Mods (planned): gameplay-mods/index.md
-  - Levels & Biomes (planned): levels-biomes/index.md
-  - Game Data (planned): game-data/index.md
+  - Custom Equipment: custom-equipment/index.md
+  - Animations & VFX: animations-vfx/index.md
+  - Gameplay Mods: gameplay-mods/index.md
+  - Levels & Biomes: levels-biomes/index.md
+  - Game Data: game-data/index.md
   - Debugging & Testing (planned): debugging-testing/index.md
