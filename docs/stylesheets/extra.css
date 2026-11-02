@@ -29,3 +29,8 @@ body[data-md-color-scheme="slate"] .md-typeset h2,
 body[data-md-color-scheme="slate"] .md-typeset h3 {
   color: #fff;
 }
+
+/* Page title: pure black in light mode for maximum punch. */
+body[data-md-color-scheme="default"] .md-typeset h1 {
+  color: #000;
+}
