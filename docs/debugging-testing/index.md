@@ -1,7 +1,7 @@
 # Debugging and Testing (planned)
 
 !!! warning "Unfinished section"
-    This page is a planned outline only — there is no complete tutorial here yet.
+    This page is a planned outline only - there is no complete tutorial here yet.
 
 Diagnosing crashes, compatibility issues, and safe testing.
 

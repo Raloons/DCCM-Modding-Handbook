@@ -1,7 +1,7 @@
 # Custom Equipment (planned)
 
 !!! warning "Unfinished section"
-    This page is a planned outline only — there is no complete tutorial here yet.
+    This page is a planned outline only - there is no complete tutorial here yet.
     Outlines below show intended coverage so contributors can pick them up.
 
 Tutorials for weapons, skills, mutations, projectiles, and equipment effects.

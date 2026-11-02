@@ -41,9 +41,9 @@ The MDK build task generates the `modinfo.json` manifest and packages any declar
 
 ## Common failures
 
-- Build warnings treated as unimportant — keep builds at **0 warnings / 0 errors**; warnings in hook code often mean a signature mismatch.
-- Editing the built DLL in `coremod/mods/` instead of the source — always rebuild from source and redeploy the whole folder.
-- Checking `bin/`, `obj/`, `*.pak`, or saves into git — the handbook `.gitignore` already excludes them.
+- Build warnings treated as unimportant - keep builds at **0 warnings / 0 errors**; warnings in hook code often mean a signature mismatch.
+- Editing the built DLL in `coremod/mods/` instead of the source - always rebuild from source and redeploy the whole folder.
+- Checking `bin/`, `obj/`, `*.pak`, or saves into git - the handbook `.gitignore` already excludes them.
 
 ## Safety / rollback
 

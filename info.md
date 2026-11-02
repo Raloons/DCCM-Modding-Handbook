@@ -12,7 +12,7 @@ This handbook focuses on modding through **Dead Cells Core Modding (DCCM)**.
 
 DCCM and its associated development tools are required for following the implementation tutorials.
 
-- [Dead Cells Core Modding — GitHub](https://github.com/dead-cells-core-modding/core)
+- [Dead Cells Core Modding - GitHub](https://github.com/dead-cells-core-modding/core)
 - [DCCM Documentation](https://dead-cells-core-modding.github.io/docs/)
 
 Requirements and compatibility may vary depending on the framework version and the tutorial. The version of Dead Cells used is version 35 (The End Is Near).

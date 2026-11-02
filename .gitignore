@@ -1,4 +1,4 @@
-# DCCM Modding Handbook — new clean repo scaffold
+# DCCM Modding Handbook - new clean repo scaffold
 # Handbook-appropriate ignore: build outputs, game data, saves, logs.
 # Never commit proprietary game files, saves, or absolute-path manifests.
 

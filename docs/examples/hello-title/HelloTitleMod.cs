@@ -1,4 +1,4 @@
-// HelloTitle — educational DCCM example (independent, no game code copied).
+// HelloTitle - educational DCCM example (independent, no game code copied).
 //
 // Appends a suffix to the title-screen build label using an orig-first,
 // fail-open hook. Demonstrates the minimal safe modding pattern only.

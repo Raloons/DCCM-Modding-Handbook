@@ -1,7 +1,7 @@
 # Custom Levels and Biomes (planned)
 
 !!! warning "Unfinished section"
-    This page is a planned outline only — there is no complete tutorial here yet,
+    This page is a planned outline only - there is no complete tutorial here yet,
     and live generation testing needs isolated fixtures plus explicit authorization.
 
 Rooms, level generation, environmental artwork, and custom locations.

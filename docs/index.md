@@ -6,9 +6,9 @@
 
 New to DCCM modding? Work through these in order:
 
-- [Installation](getting-started/01-installation.md) — game + framework versions, launcher, folder layout, save backups.
-- [Dev Environment](getting-started/02-dev-environment.md) — .NET SDK, MDK reference, project layout, deployment.
-- [Your First Mod](getting-started/03-first-mod.md) — minimal `HelloTitle` mod with one safe hook.
+- [Installation](getting-started/01-installation.md) - game + framework versions, launcher, folder layout, save backups.
+- [Dev Environment](getting-started/02-dev-environment.md) - .NET SDK, MDK reference, project layout, deployment.
+- [Your First Mod](getting-started/03-first-mod.md) - minimal `HelloTitle` mod with one safe hook.
 
 ## Handbook Sections
 
@@ -26,7 +26,7 @@ New to DCCM modding? Work through these in order:
 
 This handbook focuses on modding through Dead Cells Core Modding (DCCM).
 
-- [Dead Cells Core Modding — GitHub](https://github.com/dead-cells-core-modding/core)
+- [Dead Cells Core Modding - GitHub](https://github.com/dead-cells-core-modding/core)
 - [DCCM Documentation](https://dead-cells-core-modding.github.io/docs/)
 
 Requirements and compatibility may vary depending on the framework version and the tutorial. The reference game version for the initial tutorials is Dead Cells version 35.

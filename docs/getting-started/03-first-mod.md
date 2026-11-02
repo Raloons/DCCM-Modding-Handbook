@@ -2,7 +2,7 @@
 
 ## Goal
 
-Build and deploy a minimal title-screen mod that appends text to the existing build label — without replacing game text, assets, or saves.
+Build and deploy a minimal title-screen mod that appends text to the existing build label - without replacing game text, assets, or saves.
 
 This is an independently written teaching example. It demonstrates the *pattern* (orig-first hook + fail-open guard) without copying any project or game code.
 
@@ -68,20 +68,20 @@ public class HelloTitleMod(ModInfo info) : ModBase(info)
 ## Why this works
 
 - `Initialize()` runs once under the modded launcher; the hook attaches there, not in a constructor.
-- The hook calls `orig(self)` first so native layout/text still runs, then appends — additive changes are the safest first experiment.
+- The hook calls `orig(self)` first so native layout/text still runs, then appends - additive changes are the safest first experiment.
 - `AsHaxeString()` marshals the .NET string into the engine's string type; raw .NET strings must not be assigned directly.
 - The `try/catch` keeps a cosmetic failure from breaking the title screen (fail-open).
 
 ## Common failures
 
-- Hook name typo (`TitleScreen` vs `pr.TitleScreen`, method name casing) — the hook silently never fires. Compare against DCCM docs and log on attach.
-- Forgetting `orig(self)` — the native label/layout never runs; always forward exactly once.
-- Assigning a .NET string without marshaling — use the framework's conversion helper.
-- Testing on the vanilla exe — the framework never loads there.
+- Hook name typo (`TitleScreen` vs `pr.TitleScreen`, method name casing) - the hook silently never fires. Compare against DCCM docs and log on attach.
+- Forgetting `orig(self)` - the native label/layout never runs; always forward exactly once.
+- Assigning a .NET string without marshaling - use the framework's conversion helper.
+- Testing on the vanilla exe - the framework never loads there.
 
 ## Safety / rollback
 
-This mod touches no saves, no CDB rows, and no assets. Rollback is deleting one folder. Back up saves anyway before any modded launch — it builds the habit for gameplay mods where saves *do* matter.
+This mod touches no saves, no CDB rows, and no assets. Rollback is deleting one folder. Back up saves anyway before any modded launch - it builds the habit for gameplay mods where saves *do* matter.
 
 ## Further reading
 

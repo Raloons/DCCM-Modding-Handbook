@@ -26,7 +26,7 @@ This handbook focuses on modding through **Dead Cells Core Modding (DCCM)**.
 
 DCCM and its associated development tools are required for following the implementation tutorials.
 
-- [Dead Cells Core Modding — GitHub](https://github.com/dead-cells-core-modding/core)
+- [Dead Cells Core Modding - GitHub](https://github.com/dead-cells-core-modding/core)
 - [DCCM Documentation](https://dead-cells-core-modding.github.io/docs/)
 
 Requirements and compatibility may vary depending on the framework version and the tutorial. The reference game version for the initial tutorials is Dead Cells version 35.
@@ -47,12 +47,12 @@ The project is intended to grow over time as techniques are documented, tested, 
 docs/
   index.md                  Handbook landing page
   getting-started/          Finished tutorials (start here)
-  custom-equipment/         Stub — planned
-  animations-vfx/           Stub — planned
-  gameplay-mods/            Stub — planned
-  levels-biomes/            Stub — planned
-  game-data/                Stub — planned
-  debugging-testing/        Stub — planned
+  custom-equipment/         Stub - planned
+  animations-vfx/           Stub - planned
+  gameplay-mods/            Stub - planned
+  levels-biomes/            Stub - planned
+  game-data/                Stub - planned
+  debugging-testing/        Stub - planned
   examples/hello-title/     Minimal educational mod
 ```
 
