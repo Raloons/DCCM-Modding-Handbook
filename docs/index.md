@@ -20,6 +20,9 @@ New to DCCM modding? Work through these in order:
 | [Levels & Biomes](levels-biomes/index.md) | In-depth tutorial: observer, fixture, validator, walkable room |
 | [Game Data](game-data/index.md) | In-depth tutorial: packaging, validation suite, five-load proof |
 | [Debugging & Testing](debugging-testing/index.md) | Planned outline |
+| [Melee Weapon example](examples/melee-weapon.md) | Real code: Waveblade entry point |
+| [Skill example](examples/skill.md) | Real code: Reserve Battery entry point |
+| [Mutation example](examples/mutation.md) | Real code: Twin Daggers policy |
 
 ## Requirements
 

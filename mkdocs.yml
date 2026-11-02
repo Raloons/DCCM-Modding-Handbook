@@ -68,3 +68,7 @@ nav:
   - Levels & Biomes: levels-biomes/index.md
   - Game Data: game-data/index.md
   - Debugging & Testing (planned): debugging-testing/index.md
+  - Examples:
+      - Melee Weapon: examples/melee-weapon.md
+      - Skill: examples/skill.md
+      - Mutation: examples/mutation.md
