@@ -1,6 +1,7 @@
 # Melee Weapon Example: Waveblade creation
 
 This is my source code for the Waveblade demo weapon.
+
 What does it do?
 - Waveblade doesn't do anything fancy. It shoots a projectile on every melee attack to test weapon capabilities and rendering. It reuses the Assassin's Dagger crit condition and animation. However, loading the weapon does confirm that you can add custom items.
 
