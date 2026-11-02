@@ -1,10 +1,11 @@
-# Affix Example: Pure Nail Policy
+# Legendary Affix Replacement Example: Pure Nail
 
-Real project code from the Beyond the Dead research mod, presented as-is with one punctuation cleanup. This is the complete policy file behind a custom pogo affix: geometry tests, bounce confirmation, and jump-restore rules as pure logic with no game calls. The behavior code that reads these values is included below as File 2 - policy plus behavior is the complete affix.
+This is my raw code for my Pure Nail affix. 
+
+What does it do?
+- This makes Pure Nail have a unique affix instead of being a plain placeholder of spawning biters on kill. When you have missing jumps, Pure Nail will refresh one jump for the first hit you land in the air with the weapon. This resets upon touching the ground.
 
 ```csharp
-// Pure Nail pure policy (M80.08) - Pogo Master numbers and geometry. No
-// game-proxy dependency; standalone tests verify without GameProxy.
 namespace BtdMutations
 {
     public static class PureNailPolicy
@@ -58,13 +59,6 @@ namespace BtdMutations
 ## File 2: PureNailRework - watch, confirm, grant
 
 ```csharp
-// Pure Nail - Pogo Master. M80.21 corrects the native USED-jump polarity.
-// Evidence: m6841-testenv/evidence/m8021-repair/nail-findings.md.
-// Existing landed-hit/fixedUpdate fan-outs only. No movement or input writes.
-// Native down attack selects cycle 3 (f@35686); a successful down hit increments
-// jumpStreakCount (f@35675) before onExecute applies its bounce (f@35674).
-// Confirm both that native success marker and the existing 8px rise before
-// decrementing exactly one spent AirJump use through its existing setter.
 using dc;
 using dc.en;
 using dc.tool.atk;
