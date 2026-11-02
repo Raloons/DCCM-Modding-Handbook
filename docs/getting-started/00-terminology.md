@@ -2,6 +2,9 @@
 
 Words the code uses that the game never says out loud. Read this before installing anything: every tutorial and example after it assumes you know these names. Each entry gives the plain meaning first, then the code detail you will actually see.
 
+## Important
+The game's original developers were mainly French. This leads to many of the ID names being in French, which can cause issues with trying to guess or deduce what items are called. **Keep this in mind.**
+
 ## Who is who
 
 **Hero**: This is you! In code, the player character is called the Hero (`Hero`, `hero`, `self.hero`, `manager.hero`). If a tutorial says "the hero's inventory" it means your inventory. Related things you will see: `hero.life` (current health), `hero.destroyed` (gone - never touch objects after this is true), `hero.dir` (facing: left or right), and `hero._level` (the level object the hero currently belongs to, or nothing when between levels).
@@ -19,9 +22,6 @@ The InventItem is the script sitting in the theater library. Fixed text, sits on
 Casting the show is the factory: new BackStabber(hero, item) takes the script plus a theater and an actor (you, the Hero) and puts on a performance. That performance is the Weapon, it has everything a script doesn't: actors on stage right now (owner), which scene is playing (get_cycle), where the props are (areas), and it ends every night (destroyed).
 
 Each swing is one scene performed. When the run closes (unequip), the set is struck and the actors go home, but the script goes back on the shelf word-for-word unchanged, ready to be staged again tomorrow. That's why saves store the item, never the performance: you save the script, not Tuesday night's show.
-
-
-## Important: the game's original developers were mainly French. This leads to many of the ID names being in French, which can cause issues with trying to guess or deduce what items are called. **Keep this in mind.**
 
 ## Where things live
 
