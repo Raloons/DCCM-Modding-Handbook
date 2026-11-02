@@ -1,19 +1,8 @@
 # Dead Cells Modding Handbook
 
-![License: GPL-3.0](https://img.shields.io/github/license/Raloons/DCCM-Modding-Guides)
-![Docs deploy](https://github.com/Raloons/DCCM-Modding-Guides/actions/workflows/deploy.yml/badge.svg)
-
 **Dead Cells Modding Handbook** is a free, open-source community resource dedicated to helping developers learn how to create and expand mods for *Dead Cells* using the **Dead Cells Core Modding (DCCM)** framework.
 
-!!! tip "TIP"
-    For **Steam** users, you can install DCCM via the Workshop. For **GOG** users, you can install DCCM manually. See the [DCCM documentation](https://dead-cells-core-modding.github.io/docs/) and join the DCCM Discord server for more help.
-
-!!! warning "WARNING"
-    This handbook remains under active development. This means:
-
-    - New tutorials may appear without prior notice.
-    - Some advanced subjects are experimental or require additional verification.
-    - If you spot a mistake, please [open an issue](https://github.com/Raloons/DCCM-Modding-Guides/issues).
+This handbook is under active development: new tutorials appear over time, and some advanced subjects are experimental. If you spot a mistake, please [open an issue](https://github.com/Raloons/DCCM-Modding-Guides/issues).
 
 ## Getting Started
 

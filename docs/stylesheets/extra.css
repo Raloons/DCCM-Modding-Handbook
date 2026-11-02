@@ -12,3 +12,20 @@
   font-weight: 800;
   letter-spacing: -0.02em;
 }
+
+/* Body copy 2px smaller than the 16px Material default. */
+.md-typeset {
+  font-size: 1.4rem;
+  line-height: 1.65;
+}
+
+/* Stronger copy contrast in dark mode: near-white body text. */
+body[data-md-color-scheme="slate"] .md-typeset {
+  color: rgba(255, 255, 255, .95);
+}
+
+body[data-md-color-scheme="slate"] .md-typeset h1,
+body[data-md-color-scheme="slate"] .md-typeset h2,
+body[data-md-color-scheme="slate"] .md-typeset h3 {
+  color: #fff;
+}
