@@ -1,6 +1,7 @@
-# Mutation Example: Contagion Range Visual
+# Mutation Example: Contagion
 
 This is my source code for the Contagion mutation.
+
 What does it do?
 - Contagion is a mutation that spreads DoT effects (bleed, poison, and burn) in a circle that is rendered and visible. It only spreads said effects if the enemy that is hit by a melee attack already has that effect on it.
 
