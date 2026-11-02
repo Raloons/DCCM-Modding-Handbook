@@ -8,6 +8,7 @@ edit_uri: blob/main/docs/
 
 theme:
   name: material
+  font: false
   features:
     - navigation.tabs
     - navigation.sections
@@ -46,6 +47,14 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.highlight:
       linenums: false
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Raloons/DCCM-Modding-Guides
+      name: GitHub repository
+extra_css:
+  - stylesheets/extra.css
 
 nav:
   - Home: index.md
