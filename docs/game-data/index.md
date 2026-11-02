@@ -1,5 +1,8 @@
 # Game Data and Resources (planned)
 
+!!! warning "Unfinished section"
+    This page is a planned outline only — there is no complete tutorial here yet.
+
 CastleDB, resource packages, native data structures, and mod registration.
 
 Planned pages:

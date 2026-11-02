@@ -1,5 +1,8 @@
 # Gameplay Modifications (planned)
 
+!!! warning "Unfinished section"
+    This page is a planned outline only — there is no complete tutorial here yet.
+
 Damage scaling, combat behavior, movement, and native-system interaction.
 
 Planned pages:

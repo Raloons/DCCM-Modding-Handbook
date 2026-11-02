@@ -1,5 +1,8 @@
 # Animations and Visual Effects (planned)
 
+!!! warning "Unfinished section"
+    This page is a planned outline only — there is no complete tutorial here yet.
+
 Working with animation sequences, sprite resources, custom effects, and rendering.
 
 Planned pages:

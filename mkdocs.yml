@@ -1,16 +1,63 @@
 site_name: Dead Cells Modding Handbook
 site_description: Community DCCM modding tutorials and references.
+site_author: DCCM Modding Handbook contributors
+site_url: https://raloons.github.io/DCCM-Modding-Guides/
+repo_url: https://github.com/Raloons/DCCM-Modding-Guides
+repo_name: Raloons/DCCM-Modding-Guides
+edit_uri: blob/main/docs/
+
 theme:
-  name: readthedocs
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.tracking
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.action.edit
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: violet
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: violet
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      linenums: false
+
 nav:
   - Home: index.md
   - Getting Started:
       - Installation: getting-started/01-installation.md
       - Dev Environment: getting-started/02-dev-environment.md
       - Your First Mod: getting-started/03-first-mod.md
-  - Custom Equipment: custom-equipment/index.md
-  - Animations & VFX: animations-vfx/index.md
-  - Gameplay Mods: gameplay-mods/index.md
-  - Levels & Biomes: levels-biomes/index.md
-  - Game Data: game-data/index.md
-  - Debugging & Testing: debugging-testing/index.md
+  - Examples:
+      - HelloTitle Overview: examples/hello-title/README.md
+  - Custom Equipment (planned): custom-equipment/index.md
+  - Animations & VFX (planned): animations-vfx/index.md
+  - Gameplay Mods (planned): gameplay-mods/index.md
+  - Levels & Biomes (planned): levels-biomes/index.md
+  - Game Data (planned): game-data/index.md
+  - Debugging & Testing (planned): debugging-testing/index.md
