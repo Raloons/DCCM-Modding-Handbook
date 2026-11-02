@@ -2,6 +2,10 @@
 
 Real project code from the Beyond the Dead research mod, presented as-is with one punctuation cleanup. This is the complete entry-point file of the Waveblade custom melee weapon: factory hook, swing hook, asset-pack loading, and a data-row probe. Its combat core (`WavebladeCombat`) is included below as File 2 - entry point plus combat logic is the complete weapon vertical slice.
 
+## Artwork status: none required
+
+The code below needs zero custom art: the slash reuses the native SonicBolt look, and nothing in either file loads an image. The only art-adjacent piece is the data row's icon reference, and the simplest path is pointing it at the stock base weapon's icon - the same reuse principle the code already follows by subclassing BackStabber. That makes the whole example runnable with no art pipeline at all; a custom icon remains an optional follow-up (see [Custom Equipment](../custom-equipment/index.md)).
+
 ```csharp
 using ModCore.Events.Interfaces;
 using ModCore.Events.Interfaces.Game;
