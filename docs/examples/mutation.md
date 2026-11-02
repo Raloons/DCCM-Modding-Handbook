@@ -1,6 +1,6 @@
 # Mutation Example: Contagion Range Visual
 
-Real project code from the Beyond the Dead research mod, presented as-is with one punctuation cleanup. This is the complete rendering file behind a reworked Contagion mutation: a world-space ring showing the spread radius, drawn with native graphics calls, faded over a fixed lifetime, and released on level change. The spread logic itself lives in a companion file - this page is the rendering half, where custom shapes meet engine lifetime rules.
+Real project code from the Beyond the Dead research mod, presented as-is with one punctuation cleanup. This is the complete rendering file behind a reworked Contagion mutation: a world-space ring showing the spread radius, drawn with native graphics calls, faded over a fixed lifetime, and released on level change. The spread logic and the shared policy it reads are included below as Files 2 and 3 - all three together are the complete mutation.
 
 ```csharp
 using dc;
@@ -95,6 +95,350 @@ internal static class ContagionRangeVisual
 **Three independent kill conditions.** The tick releases the ring when time expires, when the hero is destroyed or changes level, or when the mutation is unequipped. Any one suffices. Visuals tied to equipment must watch the equipment, not assume it is still there.
 
 **Failure degrades to nothing.** The catch path logs at most four warnings, then clears. A broken ring never breaks the spread it illustrates ("spread already completed") - cosmetics fail open while mechanics already finished.
+
+## File 2: ContagionRework - trigger, spread, and apply
+
+```csharp
+// Contagion (M62) - original Tactics mutation: DoT spread on direct hits.
+//
+// Registration tradeoff (documented): BtdMutations ships no CDB rows, so a
+// genuinely new ID is unselectable (getAvailablePerks enumerates Data.item;
+// Inventory.add dereferences _itemData.group; no icon/name for the UI).
+// Contagion therefore reuses the P_DmgNearRanged row (Tactics color family,
+// close-range theme adjacent). Vanilla effect fully mapped in evidence -
+// exactly ONE consumer, the inline f@18898 close-range branch, hasItem-gated
+// (proven) - so the standard hasItem poison suppresses it completely, same
+// audit standard as M60's targeted decomp. No vanilla affect usage exists.
+// Row NAME and ICON stay vanilla (name resolution path unverified -
+// gameplayDesc patching is the proven mechanism); the artist can revisit.
+// Rework gate uses countItemKind (complementary, never interferes).
+//
+// Effect (director-exact, M65.2): a qualifying DIRECT MELEE hit on a Mob
+// suffering an eligible DoT (88 burn / 89 bleed / 90 poison) spreads ONE
+// stack of each present type to nearby Mobs within 6 cells, duration from
+// Tactics, source dps copied unscaled. Melee-only trigger (proven M56 gate);
+// ranged/skills/DoT excluded. No cooldown; chain spreading via later direct
+// hits allowed; DoT ticks can never trigger (they never reach
+// Hero.onOwnAttackDealt - proven single caller f@18901 HeroAttackSource.onHit).
+//
+// Status-ownership design (proven by f@888 decomp): 88/89/90 live in the
+// None(KeepHighestProduct) merge family - setAffectS NEVER appends a second
+// entry, it merges into the single entry (upgrades only on higher t*val).
+// Consequences, all by construction, no companion state needed:
+//   - at most one entry per type exists: unlimited Contagion stacks IMPOSSIBLE;
+//   - natural entries are never erased (merge upgrades or no-ops);
+//   - re-application refreshes iff the old entry decayed (higher new product).
+// Immunities/resists apply natively (Mob.setAffectS f@1081 + getAffectResist
+// duration scaling in f@888); application verified by hasAffect read-back.
+// Oil (94, non-damaging primer) and all unproven IDs are excluded.
+using dc;
+using dc.en;
+using dc.tool.atk;
+using ModCore.Utilities;
+using Serilog;
+
+namespace BtdMutations
+{
+    public static class ContagionRework
+    {
+        public const string PerkId = CustomMutationIds.Contagion;
+
+        public const string Description =
+            "Melee hits on enemies affected by bleeding, poison, or burning spread those effects to nearby enemies.";
+
+        // Duration text: one or two decimals, no trailing zeros
+        // ("1", "1.84", "2.89", "5"). Says "effects", never "stacks":
+        // single-entry native merge means exact stack counts are not copied.
+        // Unit grammar (M65.7.1): singular "second" only when the formatted
+        // value is exactly 1, otherwise plural "seconds".
+        public static string DurationText(double seconds) => seconds.ToString("0.##");
+
+        public static string DynamicDescription(int tactics)
+        {
+            double d = M62Policy.DurationFor(tactics < 1 ? 1 : tactics);
+            return Description + " Copied effects last " + DurationText(d) + " " +
+                DurationUnit(d) + ". Repeating refreshes duration.";
+        }
+
+        public static string DurationUnit(double seconds) =>
+            DurationText(seconds) == "1" ? "second" : "seconds";
+
+        public delegate void OrigOwnAttackDealt(Hero self, AttackData atk, Entity target);
+
+        private static int triggers;
+        private static int spreads;
+        private static int noDotSkips;
+        private static int failures;
+        private static int refreshLogs;
+        private const int VerboseLimit = 40;
+        private const int QuietLimit = 12;
+
+        // Subscriber: called from MutationDispatch.AttackDealt (no new hook).
+        // orig already ran (pass-through delegate); this only reads + spreads.
+        public static void OnOwnAttackDealt(OrigOwnAttackDealt orig, Hero self, AttackData atk, Entity target)
+        {
+            try { orig(self, atk, target); }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "BtdMutations Contagion: onOwnAttackDealt orig failed");
+                return;
+            }
+
+            try
+            {
+                if (self == null || target == null) return;
+                if (target is Hero) return;
+                if (target is not Mob victim) return;
+                bool equipped;
+                try { equipped = MutationEquipment.IsEquipped(self.inventory, PerkId); }
+                catch { return; }
+                if (!equipped) return;
+                if (!Qualifies(atk, target)) return;
+
+                // Read eligible source statuses (dps copied unscaled).
+                var present = new System.Collections.Generic.List<(int id, double dps)>();
+                foreach (int id in M62Policy.EligibleAffectIds)
+                {
+                    bool has = false;
+                    try { has = victim.hasAffect(id); } catch { continue; }
+                    if (!has) continue;
+                    double dps = 0.0;
+                    try { dps = victim.getHighestAffectValue(id); } catch { dps = 0.0; }
+                    if (!(dps > 0.0)) continue;
+                    present.Add((id, dps));
+                }
+                if (present.Count == 0)
+                {
+                    if (System.Threading.Interlocked.Increment(ref noDotSkips) <= QuietLimit)
+                        Log.Information("BtdMutations Contagion: direct hit, no eligible DoT on victim mobUid={Mob}",
+                            SafeUid(victim));
+                    return;
+                }
+
+                int tactics = 1;
+                try { tactics = self.tacticTier; } catch { tactics = 1; }
+                double durationS = M62Policy.DurationFor(tactics);
+                int t = System.Threading.Interlocked.Increment(ref triggers);
+                if (t <= VerboseLimit)
+                    Log.Information("BtdMutations Contagion: trigger ({N} types) victim mobUid={Mob} tactics={T} dur={Dur:F2}s",
+                        present.Count, SafeUid(victim), tactics, durationS);
+
+                Spread(self, victim, present, durationS);
+                ContagionRangeVisual.Show(victim);
+            }
+            catch (Exception ex)
+            {
+                if (System.Threading.Interlocked.Increment(ref failures) <= VerboseLimit)
+                    Log.Warning(ex, "BtdMutations Contagion: spread failed");
+            }
+        }
+
+        // Direct-hit gate (M65.2: melee ONLY - the proven M56 gate via
+        // IsDirectMelee). Ranged/skill branches removed per approved trigger
+        // rules; melee-weapon projectiles stay excluded (carrier + no tag17
+        // unless verified direct). DoT ticks never arrive here (path
+        // exclusion, proven single caller f@18901 HeroAttackSource.onHit).
+        internal static bool Qualifies(AttackData? atk, Entity? target)
+            => VengeanceRework.IsDirectMelee(atk, target);
+
+        private static void Spread(Hero hero, Mob victim, System.Collections.Generic.List<(int id, double dps)> present, double durationS)
+        {
+            int applied = 0, immune = 0, outOfRange = 0, dead = 0;
+            try
+            {
+                dynamic? team = null;
+                try { team = ((dynamic)hero)._team; } catch (Exception ex)
+                {
+                    if (System.Threading.Interlocked.Increment(ref failures) <= VerboseLimit)
+                        Log.Warning(ex, "BtdMutations Contagion: team unreadable");
+                    return;
+                }
+                if (team == null) return;
+                dynamic? iter = null;
+                try { iter = team.opponentMobsIterator.reset(team); }
+                catch (Exception ex)
+                {
+                    if (System.Threading.Interlocked.Increment(ref failures) <= VerboseLimit)
+                        Log.Warning(ex, "BtdMutations Contagion: iterator failed");
+                    return;
+                }
+                int victimUid = SafeUid(victim);
+                // Bounded iteration (M63.1 audit): a poisoned iterator (e.g.
+                // concurrent team mutation via onAffectChange) must never spin
+                // the game thread - cap total steps and consecutive errors.
+                const int MaxSteps = 128;
+                const int MaxErrors = 8;
+                int steps = 0, errors = 0;
+                while (true)
+                {
+                    if (++steps > MaxSteps) break;
+                    bool hasNext = false;
+                    try { hasNext = iter.hasNext(); }
+                    catch { if (++errors >= MaxErrors) break; else continue; }
+                    if (!hasNext) break;
+                    Entity? e = null;
+                    try { e = iter.next() as Entity; }
+                    catch { if (++errors >= MaxErrors) break; else continue; }
+                    errors = 0;
+                    if (e == null || e is Hero) continue;
+                    if (e is not Mob mob) continue;
+                    int uid = SafeUid(mob);
+                    if (uid == victimUid) continue; // never self-refresh the source
+                    int life = 0;
+                    bool destroyed = true;
+                    try { life = mob.life; destroyed = mob.destroyed; } catch { continue; }
+                    if (destroyed || life <= 0) { dead++; continue; }
+                    double dx, dy;
+                    try { CellsDelta(victim, mob, out dx, out dy); }
+                    catch { continue; }
+                    if (!M62Policy.WithinRadius(dx, dy)) { outOfRange++; continue; }
+                    foreach (var (id, dps) in present)
+                    {
+                        bool ok = ApplySingle(mob, id, dps, durationS);
+                        if (ok) applied++; else immune++;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                if (System.Threading.Interlocked.Increment(ref failures) <= VerboseLimit)
+                    Log.Warning(ex, "BtdMutations Contagion: recipient loop failed");
+                return;
+            }
+
+            int s = System.Threading.Interlocked.Increment(ref spreads);
+            if (s <= VerboseLimit)
+                Log.Information("BtdMutations Contagion: spread applied={Applied} immuneOrFailed={Immune} outOfRange={Range} dead={Dead}",
+                    applied, immune, outOfRange, dead);
+        }
+
+        // Single application; native merge keeps at most one entry per type
+        // (f@888 KeepHighestProduct: upgrade-or-noop, never append) and native
+        // resists/immunity filter. Remaining-before vs applied-duration is
+        // logged on refresh so live sessions prove refresh-only behavior.
+        // Value is passed via Ref.From (designed .NET-ref wrapper - a
+        // hand-filled struct field is NOT a proven marshaling path).
+        // set-throw, read-back, and resist are logged separately so live
+        // sessions distinguish marshaling failure from genuine immunity.
+        private static bool ApplySingle(Mob mob, int affectId, double dps, double durationS)
+        {
+            double resist = double.NaN;
+            double remainingBefore = double.NaN;
+            try { resist = mob.getAffectResist(affectId); } catch { }
+            try { remainingBefore = mob.getHighestAffectDurationS(affectId); } catch { }
+            try
+            {
+                double v = dps;
+                var valRef = HaxeProxy.Runtime.Ref<double>.From(ref v);
+                try { mob.setAffectS(affectId, durationS, valRef, null); }
+                catch (Exception ex)
+                {
+                    if (System.Threading.Interlocked.Increment(ref failures) <= VerboseLimit)
+                        Log.Warning(ex, "BtdMutations Contagion: setAffectS threw id={Id}", affectId);
+                    return false;
+                }
+                bool present = false;
+                try { present = mob.hasAffect(affectId); } catch { return false; }
+                if (!present)
+                {
+                    if (System.Threading.Interlocked.Increment(ref failures) <= VerboseLimit)
+                        Log.Information("BtdMutations Contagion: apply read-back false id={Id} dps={Dps} resist={Resist}",
+                            affectId, dps, resist);
+                    return false;
+                }
+                if (!double.IsNaN(remainingBefore) && remainingBefore > 0.0
+                    && System.Threading.Interlocked.Increment(ref refreshLogs) <= VerboseLimit)
+                    Log.Information("BtdMutations Contagion: refreshed id={Id} remaining {Rem:F2}s -> {Dur:F2}s",
+                        affectId, remainingBefore, durationS);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (System.Threading.Interlocked.Increment(ref failures) <= VerboseLimit)
+                    Log.Warning(ex, "BtdMutations Contagion: apply ref failed id={Id}", affectId);
+                return false;
+            }
+        }
+
+        // Cell-space delta mirroring the vanilla proximity pattern (f@21553):
+        // (cx+xr) centers, hei*0.5 vertical adjust, hei in px (/24).
+        internal static void CellsDelta(Entity a, Entity b, out double dx, out double dy)
+        {
+            double ax = a.cx + a.xr;
+            double ay = a.cy + a.yr;
+            double bx = b.cx + b.xr;
+            double by = b.cy + b.yr;
+            dx = ax - bx;
+            dy = (ay - by) - ((a.hei - b.hei) * 0.5 / 24.0);
+        }
+
+        private static int SafeUid(Entity e)
+        {
+            try { return e.__uid; } catch { return -1; }
+        }
+    }
+}
+```
+
+Note: the file above keeps the project's own evidence annotations (`f@...`, milestone tags) - those point at the author's analysis notes, not game code. Two comment sentences were reordered during page assembly (the duration-text note now sits with the other description helpers); logic is untouched.
+
+### What to notice in File 2
+
+- **Subscriber, not a new hook.** `OnOwnAttackDealt` is called from the existing dispatch with `orig` already run - it only reads and spreads. Fewer hooks means fewer ordering hazards.
+- **The gate is one shared predicate.** `Qualifies` delegates to the Vengeance melee check, so both mutations agree on what "direct melee" means. DoT ticks can never arrive here by path exclusion, and the comment proves it rather than asserting it.
+- **Bounded iteration with an error budget.** 128 steps max, 8 consecutive errors max - a poisoned iterator (concurrent team mutation mid-loop) breaks the loop instead of hanging the game thread. The caps are named constants, not magic numbers.
+- **Set, then read back.** Every application verifies via `hasAffect`, distinguishing marshaling failure from genuine immunity in the logs. Resist and remaining-before values are captured so refresh behavior is provable from live logs.
+- **The visual shares the math.** `Spread` calls `ContagionRangeVisual.Show(victim)` right after spreading, and both use `M62Policy` distances - the ring on screen and the damage in the game cannot disagree.
+
+## File 3: M62Policy - the single source of truth
+
+```csharp
+// M62 pure policy (no game-proxy dependency) - single source of truth for
+// Contagion numbers. The rework class delegates here so the standalone
+// production-policy tests verify without GameProxy.
+namespace BtdMutations
+{
+    public static class M62Policy
+    {
+        // Director-approved design (exact). Radius 6 cells (M65.2: verified
+        // cell-coordinate scale; 3 cells demonstrably too tight in gameplay -
+        // recipients almost always out of range).
+        public const double SpreadRadiusCells = 6.0;
+
+        // Eligible DoT affect IDs (proven: 88=burn, 89=bleed, 90=poison -
+        // KeepHighestProduct single-entry merge family in f@888).
+        // Oil (94) is a non-damaging primer: excluded. No other compatible
+        // damaging statuses exist in evidence: excluded.
+        public static readonly int[] EligibleAffectIds = new[] { 88, 89, 90 };
+
+        public static bool IsEligibleAffect(int affectId)
+        {
+            for (int i = 0; i < EligibleAffectIds.Length; i++)
+                if (EligibleAffectIds[i] == affectId) return true;
+            return false;
+        }
+
+        // Duration (M65.7 director-approved balance):
+        // min(5.0, 1.0 + 4.0 * (max(1, Tactics) - 1) / 19.0).
+        // 1->1.00s, 5->1.84s, 10->2.89s, 15->3.95s, 20+->5.00s.
+        public static double DurationFor(int tactics)
+        {
+            if (tactics < 1) tactics = 1;
+            double duration = 1.0 + 4.0 * (tactics - 1) / 19.0;
+            return duration > 5.0 ? 5.0 : duration;
+        }
+
+        public static bool WithinRadius(double dx, double dy)
+            => dx * dx + dy * dy <= SpreadRadiusCells * SpreadRadiusCells;
+    }
+}
+```
+
+### What to notice in File 3
+
+- **One file owns every number.** Radius, eligible IDs, duration curve - the spread logic (File 2) and the visual ring (File 1) both read from here. A balance change is one edit, verified once, reflected everywhere.
+- **Excluded IDs are documented exclusions.** Oil (94) is named and rejected with a reason, not silently absent. Future readers know it was considered.
+- **The duration curve shows its work.** Formula, sample values, and caps are all in the comment, so the design intent survives without its author.
 
 ## Further reading
 
