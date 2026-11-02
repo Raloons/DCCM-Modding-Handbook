@@ -183,14 +183,6 @@ public static class WavebladeCombat
         // obsolete child-bitmap probe cannot supply a visible replacement.
     }
 
-    // Director-approved balance: the slash carries a quarter of the sword
-    // strike's nominal base. Applied once, on our private snapshot, at the
-    // baseDmg stage (vanilla overrideBaseDamage, f@1807: plain field set, the
-    // same slot BulletBlade replaces with power2/n). Everything downstream -
-    // tier scaling, affix bonuses, crit multiplication, negation - reads that
-    // field, so it scales proportionally and the melee snapshot is untouched.
-    // Fail-safe: any unexpected shape leaves the snapshot unscaled (melee
-    // equivalent) and logs, rather than risking a zero-damage slash.
     private static void ScaleProjectileDamage(AttackData attack)
     {
         try
