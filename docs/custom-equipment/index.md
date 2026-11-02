@@ -229,12 +229,27 @@ Design notes an AI implementer should preserve:
 - `MaxProjectiles` and `MaxTracked` make worst-case memory provable by reading the code.
 - `ResetSwingState` exists as a named step so future per-swing fields have exactly one place to reset - the classic leak source is a second per-swing field added later with no reset.
 
-## Part 5 - Icon pipeline
+## Part 5 - Custom icons, end to end
 
-1. Create original 24px art (your pixels only, transparent background where the sheet format requires it).
-2. Paint it into your claimed unused cell and no other cell.
-3. In-game check at real size and on both light backgrounds (inventory) and dark backgrounds (world drop): if it is mud at 24px, simplify shapes, not colors.
-4. Record the cell coordinates in `verify/checklist.md` next to the row ID.
+Item icons live on a shared sheet: a grid of small tiles where each mod paints only into cells it has claimed. A correct icon job has four proofs: your pixels sit in exactly one claimed cell, every neighboring cell is byte-identical to before, the game shows your art (not a neighbor, not blank), and it stays legible at real size.
+
+**Step 1 - Claim one unused cell and write it down.** Pick a cell no stock row and no other mod uses (the research used cells like (60,40), (61,40), (62,40), (67,40) - yours must be one you have verified empty yourself). Record the sheet name and coordinates in `verify/checklist.md` next to the row ID before painting anything. The record is the thing that prevents two mods silently sharing a cell months later.
+
+**Step 2 - Author original art, bigger than the cell.** Paint your icon larger than the final tile (32px source for a 24px tile is the proven ratio), using only your own pixels: simple silhouettes read at tiny sizes, fine detail turns to mud. Keep one exact matte color for areas that must become transparent - a single flat value, not a gradient, so the conversion in step 3 is exact.
+
+**Step 3 - Reduce into the cell, touching nothing else.** Shrink the source into the claimed cell with a quality downscale, convert your exact matte color to transparent, and verify every other pixel of the sheet is byte-identical to the pre-edit copy. Diff the sheet before and after: the only changed pixels must be inside your one cell. One mod owns each sheet file it ships; if two mods ship the same sheet, they conflict regardless of cells.
+
+**Step 4 - Package and point.** Ship the sheet in your `res.pak` (own bytes only, verified by the file-list diff from [Game Data](../game-data/index.md)), and point your row's icon reference at your cell. Rebuild from clean and confirm the packaged sheet matches your authored one hash for hash.
+
+**Step 5 - Verify in game at real size, twice.** Spawn the item and look at the icon in the inventory (light background) and as a world drop (dark background). Check: the right art, no halo fringes from the matte conversion, readable silhouette, no neighbor-cell bleed. If it is mud, simplify shapes, not colors - contrast survives shrinking, detail does not.
+
+**Ownership and conflict rules (no exceptions):**
+- One claimed cell per icon, recorded before painting.
+- One mod ships each sheet file. Never paint into a sheet another mod ships.
+- Never touch stock cells. Your removal must leave every stock icon pixel-identical.
+- Retired cells are tombstoned in your checklist, never silently reissued.
+
+**Troubleshooting:** wrong art showing means the row points at the wrong cell - re-check coordinates, not the art. Halo fringes mean the matte color was not exact - flatten to one value and re-reduce. A conflict report from another mod author means shared sheet ownership - split sheets so each mod ships its own.
 
 ## Part 6 - Deploy and verify
 
