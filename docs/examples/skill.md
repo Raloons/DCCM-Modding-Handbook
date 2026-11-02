@@ -1,7 +1,9 @@
-# Skill Example: Reserve Battery Entry Point
+# Skill Example: Reserve Battery 
 
-Real project code from the Beyond the Dead research mod, presented as-is. This is the complete entry-point file of the Reserve Battery survival skill: an activation gate, a use effect, an opt-in test fixture, asset loading, and registry delegation. It is the cooldown-gate pattern from the tutorials, running in production form. The runtime, rules, and registry it delegates to are included below as Files 2-4. The env-gated native fixtures file is test-only scaffolding and is described, not printed.
+This is my source code for a custom skill, Reserve Battery.
 
+What does it do?
+- Reserve Battery refreshes your other skill's cooldown (if that logic gate is met and it is on cooldown).
 ```csharp
 using ModCore.Events.Interfaces;
 using ModCore.Events.Interfaces.Game;
@@ -60,10 +62,6 @@ using Serilog;
 
 namespace BtdReserveBattery;
 
-// Independent Reserve Battery runtime. No carrier entity, no projectiles, no
-// timers of its own: activation gating + native cooldown reset + native
-// re-cooldown, all through verified native calls. Every entry point is
-// identity-guarded; anything that is not BTD_ReserveBattery runs vanilla.
 public static class ReserveBatteryRuntime
 {
     public delegate void OrigActivation(dc.tool.hero.HeroActiveSkillsManager self, int id, double ratio);
@@ -243,12 +241,6 @@ public static class ReserveBatteryRuntime
 ```csharp
 namespace BtdReserveBattery;
 
-// Pure gameplay constants and activation-gate logic, shared by the
-// native adapter and offline fixtures. No native calls here: testable offline.
-//
-// Approved design: Tactics-colored? No - Survival (green). 30 s base cooldown,
-// 25 s with the High-Capacity Cell legendary affix. The base refresh has no
-// damage, healing, stat scaling, or charges of its own; native affixes remain.
 public static class ReserveBatteryRules
 {
     public const string ItemId = "BTD_ReserveBattery";
