@@ -1,6 +1,8 @@
 # Mutation Example: Contagion Range Visual
 
-Real project code from the Beyond the Dead research mod, presented as-is with one punctuation cleanup. This is the complete rendering file behind a reworked Contagion mutation: a world-space ring showing the spread radius, drawn with native graphics calls, faded over a fixed lifetime, and released on level change. The spread logic and the shared policy it reads are included below as Files 2 and 3 - all three together are the complete mutation.
+This is my source code for the Contagion mutation.
+What does it do?
+- Contagion is a mutation that spreads DoT effects (bleed, poison, and burn) in a circle that is rendered and visible. It only spreads said effects if the enemy that is hit by a melee attack already has that effect on it.
 
 ```csharp
 using dc;
@@ -99,38 +101,6 @@ internal static class ContagionRangeVisual
 ## File 2: ContagionRework - trigger, spread, and apply
 
 ```csharp
-// Contagion (M62) - original Tactics mutation: DoT spread on direct hits.
-//
-// Registration tradeoff (documented): BtdMutations ships no CDB rows, so a
-// genuinely new ID is unselectable (getAvailablePerks enumerates Data.item;
-// Inventory.add dereferences _itemData.group; no icon/name for the UI).
-// Contagion therefore reuses the P_DmgNearRanged row (Tactics color family,
-// close-range theme adjacent). Vanilla effect fully mapped in evidence -
-// exactly ONE consumer, the inline f@18898 close-range branch, hasItem-gated
-// (proven) - so the standard hasItem poison suppresses it completely, same
-// audit standard as M60's targeted decomp. No vanilla affect usage exists.
-// Row NAME and ICON stay vanilla (name resolution path unverified -
-// gameplayDesc patching is the proven mechanism); the artist can revisit.
-// Rework gate uses countItemKind (complementary, never interferes).
-//
-// Effect (director-exact, M65.2): a qualifying DIRECT MELEE hit on a Mob
-// suffering an eligible DoT (88 burn / 89 bleed / 90 poison) spreads ONE
-// stack of each present type to nearby Mobs within 6 cells, duration from
-// Tactics, source dps copied unscaled. Melee-only trigger (proven M56 gate);
-// ranged/skills/DoT excluded. No cooldown; chain spreading via later direct
-// hits allowed; DoT ticks can never trigger (they never reach
-// Hero.onOwnAttackDealt - proven single caller f@18901 HeroAttackSource.onHit).
-//
-// Status-ownership design (proven by f@888 decomp): 88/89/90 live in the
-// None(KeepHighestProduct) merge family - setAffectS NEVER appends a second
-// entry, it merges into the single entry (upgrades only on higher t*val).
-// Consequences, all by construction, no companion state needed:
-//   - at most one entry per type exists: unlimited Contagion stacks IMPOSSIBLE;
-//   - natural entries are never erased (merge upgrades or no-ops);
-//   - re-application refreshes iff the old entry decayed (higher new product).
-// Immunities/resists apply natively (Mob.setAffectS f@1081 + getAffectResist
-// duration scaling in f@888); application verified by hasAffect read-back.
-// Oil (94, non-damaging primer) and all unproven IDs are excluded.
 using dc;
 using dc.en;
 using dc.tool.atk;
@@ -400,9 +370,6 @@ namespace BtdMutations
 {
     public static class M62Policy
     {
-        // Director-approved design (exact). Radius 6 cells (M65.2: verified
-        // cell-coordinate scale; 3 cells demonstrably too tight in gameplay -
-        // recipients almost always out of range).
         public const double SpreadRadiusCells = 6.0;
 
         // Eligible DoT affect IDs (proven: 88=burn, 89=bleed, 90=poison -
@@ -418,7 +385,6 @@ namespace BtdMutations
             return false;
         }
 
-        // Duration (M65.7 director-approved balance):
         // min(5.0, 1.0 + 4.0 * (max(1, Tactics) - 1) / 19.0).
         // 1->1.00s, 5->1.84s, 10->2.89s, 15->3.95s, 20+->5.00s.
         public static double DurationFor(int tactics)
