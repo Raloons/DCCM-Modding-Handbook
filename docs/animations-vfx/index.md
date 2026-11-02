@@ -34,9 +34,9 @@ Auto-layout containers place children by their own rules at reflow time. Rules l
 - **Lifetime:** exact despawn condition per node (tick count, swing end, effect end). Whichever comes first.
 - **Funeral:** level leave, run end, and mod unload release the whole pool unconditionally. One mass-release hook covers every forgotten edge case.
 
-## Part 2 - Pooled slash echoes, complete
+## Part 2 - Example VFX
 
-World-space echoes captured at swing time. Moving, rolling, or sheathing afterward must not drag them along.
+This is source code of a melee weapon's trail. This wants to be separated from the weapon so it doesn't just disappear when you move left or right by even a pixel.
 
 ```csharp
 using HaxeProxy.Runtime;
