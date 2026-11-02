@@ -13,9 +13,10 @@
   letter-spacing: -0.02em;
 }
 
-/* Body copy 2px smaller than the 16px Material default. */
+/* Body copy 2px smaller than the 16px Material default
+   (Material 9 uses a 20px root, so 14px = 0.7rem). */
 .md-typeset {
-  font-size: 1.4rem;
+  font-size: .7rem;
   line-height: 1.65;
 }
 
