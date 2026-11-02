@@ -14,11 +14,11 @@ New to DCCM modding? Work through these in order:
 
 | Section | Status |
 |---|---|
-| [Custom Equipment](custom-equipment/index.md) | Tutorial: first weapon and skill patterns |
-| [Animations & VFX](animations-vfx/index.md) | Tutorial: additive visuals and UI placement |
-| [Gameplay Mods](gameplay-mods/index.md) | Tutorial: gates, windows, and per-hit probes |
-| [Levels & Biomes](levels-biomes/index.md) | Tutorial: merge observer and first additive room |
-| [Game Data](game-data/index.md) | Tutorial: packaging overlays and the five-load proof |
+| [Custom Equipment](custom-equipment/index.md) | In-depth tutorial: first weapon and skill, end to end |
+| [Animations & VFX](animations-vfx/index.md) | In-depth tutorial: pooled effects and layout-safe UI |
+| [Gameplay Mods](gameplay-mods/index.md) | In-depth tutorial: gates, windows, probes, test protocol |
+| [Levels & Biomes](levels-biomes/index.md) | In-depth tutorial: observer, fixture, validator, walkable room |
+| [Game Data](game-data/index.md) | In-depth tutorial: packaging, validation suite, five-load proof |
 | [Debugging & Testing](debugging-testing/index.md) | Planned outline |
 | [HelloTitle example](examples/hello-title/README.md) | Complete educational example |
 
