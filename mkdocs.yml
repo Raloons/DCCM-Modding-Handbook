@@ -63,6 +63,7 @@ nav:
       - Installation: getting-started/01-installation.md
       - Dev Environment: getting-started/02-dev-environment.md
       - Your First Mod: getting-started/03-first-mod.md
+      - How Hooks Work: getting-started/04-hooks.md
   - Custom Equipment: custom-equipment/index.md
   - Animations & VFX: animations-vfx/index.md
   - Gameplay Mods: gameplay-mods/index.md

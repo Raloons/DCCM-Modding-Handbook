@@ -10,6 +10,7 @@ New to DCCM modding? Work through these in order:
 - [Installation](getting-started/01-installation.md) - game + framework versions, launcher, folder layout, save backups.
 - [Dev Environment](getting-started/02-dev-environment.md) - .NET SDK, MDK reference, project layout, deployment.
 - [Your First Mod](getting-started/03-first-mod.md) - minimal `TitleScreenTag` mod with one safe hook.
+- [How Hooks Work](getting-started/04-hooks.md) - detours, chains, ordering, Harmony nesting.
 
 ## Handbook Sections
 
